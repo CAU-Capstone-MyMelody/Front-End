@@ -1,16 +1,9 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
+import React from "react";
 import Nav from "../components/Nav";
 import TopNav from "../components/TopNav";
-import { useNavContext } from "../apis/NavContext";
+import styled from "styled-components";
 
-const Home = () => {
-  const { setActiveNav } = useNavContext();
-
-  useEffect(() => {
-    setActiveNav(0);
-  }, []);
-
+const Analyze = () => {
   return (
     <Container>
       <TopNav></TopNav>
@@ -55,7 +48,7 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Analyze;
 
 const Container = styled.div`
   background-color: #090909;

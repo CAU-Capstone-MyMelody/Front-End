@@ -20,7 +20,7 @@ const Nav = () => {
       <IconList>
         <IconButton onClick={() => handleNavClick(0, "/")}>
           <img
-            src={activeNav === 0 ? "/icon/HomeFill.png" : "/img/homeBlank.png"}
+            src={activeNav === 0 ? "/icon/HomeFill.png" : "/icon/HomeBlank.png"}
             alt="Home"
           />
           <span>홈</span>
@@ -41,7 +41,7 @@ const Nav = () => {
           />
           <span>차트</span>
         </IconButton>
-        <IconButton onClick={() => handleNavClick(3, "/userpage")}>
+        <IconButton onClick={() => handleNavClick(3, "/mypage")}>
           <img
             src={activeNav === 3 ? "/icon/UserFill.png" : "/icon/UserBlank.png"}
             alt="User"

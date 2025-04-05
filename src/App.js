@@ -4,6 +4,9 @@ import styled from "styled-components";
 import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import { NavProvider } from "./apis/NavContext";
+import Analyze from "./pages/Analyze";
+import Chart from "./pages/Chart";
+import Mypage from "./pages/Mypage";
 
 function App() {
   return (
@@ -11,6 +14,9 @@ function App() {
       <AppDom>
         <Routes>
           <Route path="/" element={<Home></Home>}></Route>
+          <Route path="/analyze" element={<Analyze></Analyze>}></Route>
+          <Route path="/chart" element={<Chart></Chart>}></Route>
+          <Route path="/mypage" element={<Mypage></Mypage>}></Route>
         </Routes>
       </AppDom>
     </NavProvider>

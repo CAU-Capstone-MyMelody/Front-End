@@ -18,14 +18,9 @@ export const NavProvider = ({ children }) => {
 
     const pathMap = {
       "/": 0,
-      "/find": 1,
-      "/lost": 2,
-      "/analyze": 3,
-      "/userpage": 4,
-      "/registeitem": 4,
-      "/chargepoint": 4,
-      "/message": 4,
-      "/messageDetail": 4,
+      "/analyze": 1,
+      "/chart": 2,
+      "/mypage": 3,
     };
 
     setActiveNav(pathMap[location.pathname] ?? 0);

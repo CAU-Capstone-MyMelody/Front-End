@@ -1,14 +1,55 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const TopNav = () => {
   const navigate = useNavigate();
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchText, setSearchText] = useState("");
+
   return (
     <Container>
-      <AppTitle>
-        <MainTitle>MyMelody</MainTitle>
-      </AppTitle>
+      {!isSearchOpen ? (
+        <>
+          <AppTitle>
+            <img src="/img/Logo.png" alt="Logo" />
+            <MainTitle>MyMelody</MainTitle>
+          </AppTitle>
+          <img
+            src="/icon/SearchIcon.png"
+            alt="Search"
+            onClick={() => setIsSearchOpen(true)}
+            style={{ cursor: "pointer" }}
+          />
+        </>
+      ) : (
+        <SearchContainer>
+          <CloseButton onClick={() => setIsSearchOpen(false)}>
+            <img
+              src="/icon/BackArrowIcon.png"
+              alt="Close"
+              style={{ cursor: "pointer" }}
+            />
+          </CloseButton>
+          <SearchBox>
+            <SearchInput
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              autoFocus
+              placeholder="노래, 아티스트 검색"
+            />
+            {searchText && (
+              <CancelButton onClick={() => setSearchText("")}>
+                <img
+                  src="/icon/CloseIcon.png"
+                  alt="Clear"
+                  style={{ cursor: "pointer" }}
+                />
+              </CancelButton>
+            )}
+          </SearchBox>
+        </SearchContainer>
+      )}
     </Container>
   );
 };
@@ -20,30 +61,94 @@ const Container = styled.div`
   top: 0;
   width: 100%;
   max-width: 600px;
-  height: 50px; // 네비게이션 바의 높이를 화면 비율에 맞춰 설정 (전체 화면의 10%)
-  max-height: 50px;
-  bottom: 0;
-  background-color: white;
+  height: 50px;
+  background-color: #090909;
+  color: white;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
-  @media (max-width: 600px) {
-    height: calc(
-      var(--vh, 1vh) * 8
-    ); // 작은 화면에서는 화면 비율에 맞게 높이 설정 전체 높이의 &%
-    max-height: 50px;
-  }
+
+  box-sizing: border-box;
+  padding: 0 1rem;
 
   z-index: 100;
+
+  img {
+    width: 1.2rem;
+  }
+
+  @media (max-width: 600px) {
+    img {
+      width: 1rem;
+    }
+  }
 `;
 
 const AppTitle = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
 `;
 
 const MainTitle = styled.div`
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: bold;
+  @media (max-width: 600px) {
+    font-size: 1rem;
+  }
+`;
+
+const SearchContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+`;
+
+const CloseButton = styled.div`
+  margin-left: 10px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+`;
+
+const SearchBox = styled.div`
+  background: #282828;
+  border-radius: 15px;
+  width: 85%;
+  margin-right: 10px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+const SearchInput = styled.input`
+  color: white;
+  height: 30px;
+  padding: 5px 15px;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  box-sizing: border-box;
+  background: transparent;
+
+  &::placeholder {
+    color: #8e8e8a;
+    font-size: 1rem;
+    font-weight: bold;
+  }
+`;
+
+const CancelButton = styled.button`
+  margin: 0 10px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
 `;
