@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 
-const TopNav = () => {
+const TopNavBack = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -84,16 +84,19 @@ const TopNav = () => {
       <Container>
         {!isSearchOpen ? (
           <>
-            <AppTitle onClick={() => navigate("/")}>
-              <img src="/img/Logo.png" alt="Logo" />
-              <MainTitle>MyMelody</MainTitle>
+            <AppTitle onClick={() => navigate(-1)}>
+              <img
+                src="/icon/BackArrowWhiteIcon.png"
+                alt="Back"
+                style={{ cursor: "pointer" }}
+              />
             </AppTitle>
             <AppTitle2 onClick={() => setIsSearchOpen(true)}>
               <img
                 src="/icon/SearchIcon.png"
                 alt="Search"
                 style={{ cursor: "pointer" }}
-              />
+              />{" "}
             </AppTitle2>
           </>
         ) : (
@@ -154,7 +157,7 @@ const TopNav = () => {
   );
 };
 
-export default TopNav;
+export default TopNavBack;
 
 // 스타일 컴포넌트는 그대로 유지
 const Container = styled.div`
@@ -185,6 +188,7 @@ const Container = styled.div`
 `;
 
 const AppTitle = styled.div`
+  margin-left: 10px;
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -195,14 +199,6 @@ const AppTitle2 = styled.div`
   display: flex;
   align-items: center;
   cursor: pointer;
-`;
-
-const MainTitle = styled.div`
-  font-size: 1.2rem;
-  font-weight: bold;
-  @media (max-width: 600px) {
-    font-size: 1rem;
-  }
 `;
 
 const SearchContainer = styled.div`

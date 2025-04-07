@@ -19,8 +19,13 @@ export const NavProvider = ({ children }) => {
     const pathMap = {
       "/": 0,
       "/analyze": 1,
+      "/genre": 1,
+      "/singlerecord": 1,
       "/chart": 2,
       "/mypage": 3,
+      "/coaching-history": 3,
+      "/history-detail": 3,
+      "/voice-analysis": 3,
     };
 
     setActiveNav(pathMap[location.pathname] ?? 0);

@@ -63,6 +63,7 @@ const Container = styled.div`
   max-height: 50px;
   // height: 8vh; // 네비게이션 바의 높이를 화면 비율에 맞춰 설정 (전체 화면의 10%)
   height: 50px; // 네비게이션 바의 높이를 화면 비율에 맞춰 설정 (전체 화면의 10%)
+  border-top: 1px solid #282828;
 
   background-color: #090909;
   display: flex;
