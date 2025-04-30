@@ -12,17 +12,15 @@ import {
 } from "chart.js";
 import TopNavBack from "../components/TopNavBack";
 
-// 재생 위치 수직 선
+// 🔽 재생 위치 수직선 플러그인
 const verticalLinePlugin = {
   id: "cursorLine",
   afterDatasetsDraw(chart) {
     const { ctx, chartArea, scales } = chart;
-    if (!ctx || !chartArea || !scales) return;
+    const currentTime = chart.config.options.plugins.cursorLineTime;
+    if (!ctx || !chartArea || !scales || currentTime == null) return;
 
     const xScale = scales.x;
-    const currentTime = chart.config.options.plugins.cursorLineTime;
-    if (currentTime == null) return;
-
     const xPos = xScale.getPixelForValue(currentTime);
 
     ctx.save();
@@ -30,7 +28,7 @@ const verticalLinePlugin = {
     ctx.moveTo(xPos, chartArea.top);
     ctx.lineTo(xPos, chartArea.bottom);
     ctx.lineWidth = 2;
-    ctx.strokeStyle = "#c9a5f5"; // 연보라
+    ctx.strokeStyle = "#c9a5f5";
     ctx.stroke();
     ctx.restore();
   },
@@ -52,13 +50,50 @@ const PitchAnalysisPage = () => {
   const [audioUrl, setAudioUrl] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [customTitle, setCustomTitle] = useState("");
-  const { time, recordedPitch, originalPitch, audioBlob, videoId } =
-    location.state || {};
+  const [selectedSegment, setSelectedSegment] = useState(null);
 
-  console.log(location.state);
+  const {
+    time = [],
+    recordedPitch = [],
+    originalPitch = [],
+    audioBlob,
+    videoId,
+  } = location.state || {};
 
-  const duration = time?.length ? time[time.length - 1] : 0;
+  const duration = time.length ? time[time.length - 1] : 0;
 
+  // 🔢 구간 나누기
+  const segments = [];
+  const step = 30;
+  for (let i = 0; i < duration; i += step) {
+    segments.push({ start: i, end: Math.min(i + step, duration) });
+  }
+
+  // 🎵 구간 필터링
+  const getFilteredData = () => {
+    if (!selectedSegment) {
+      return { labels: time, recorded: recordedPitch, original: originalPitch };
+    }
+
+    const { start, end } = selectedSegment;
+    const filtered = time.reduce(
+      (acc, t, idx) => {
+        if (t >= start && t <= end) {
+          acc.labels.push(t);
+          acc.recorded.push(recordedPitch[idx]);
+          acc.original.push(originalPitch[idx]);
+        }
+        return acc;
+      },
+      { labels: [], recorded: [], original: [] }
+    );
+
+    return filtered;
+  };
+
+  const filtered = getFilteredData();
+
+  // 오디오 Blob → URL 생성
   useEffect(() => {
     if (audioBlob) {
       const url = URL.createObjectURL(audioBlob);
@@ -67,6 +102,7 @@ const PitchAnalysisPage = () => {
     }
   }, [audioBlob]);
 
+  // 🔄 오디오 재생 시간 추적
   useEffect(() => {
     const interval = setInterval(() => {
       if (audioRef.current) {
@@ -92,7 +128,6 @@ const PitchAnalysisPage = () => {
   const handleConfirmSave = async () => {
     const saved = JSON.parse(localStorage.getItem("coachingHistory")) || [];
 
-    // base64로 오디오BLob을 변환
     const base64Audio = await blobToBase64(audioBlob);
 
     const newEntry = {
@@ -113,21 +148,25 @@ const PitchAnalysisPage = () => {
   };
 
   const data = {
-    labels: time,
+    labels: filtered.labels,
     datasets: [
       {
         label: "🎙️ 녹음 음정",
-        data: recordedPitch,
+        data: filtered.recorded,
         borderColor: "#9b7ed8",
         backgroundColor: "#9b7ed8",
         tension: 0.3,
+        pointRadius: 1,
+        borderWidth: 2,
       },
       {
         label: "🎵 원곡 음정",
-        data: originalPitch,
+        data: filtered.original,
         borderColor: "#888",
         backgroundColor: "#888",
         tension: 0.3,
+        pointRadius: 1,
+        borderWidth: 2,
       },
     ],
   };
@@ -148,7 +187,7 @@ const PitchAnalysisPage = () => {
     },
     plugins: {
       legend: { labels: { color: "#ccc" } },
-      cursorLineTime: currentTime,
+      cursorLineTime: currentTime, // 🔍 실시간 위치 전달
     },
   };
 
@@ -162,9 +201,29 @@ const PitchAnalysisPage = () => {
       <ListContainer>
         <Title>🎼 피치 분석 결과</Title>
         <AudioPlayer controls ref={audioRef} src={audioUrl} />
+
+        <SegmentButtons>
+          <SegmentButton
+            onClick={() => setSelectedSegment(null)}
+            $active={selectedSegment === null}
+          >
+            전체
+          </SegmentButton>
+          {segments.map((seg, idx) => (
+            <SegmentButton
+              key={idx}
+              onClick={() => setSelectedSegment(seg)}
+              $active={selectedSegment?.start === seg.start}
+            >
+              {seg.start}~{seg.end}s
+            </SegmentButton>
+          ))}
+        </SegmentButtons>
+
         <ChartWrapper>
           <Line data={data} options={options} />
         </ChartWrapper>
+
         <ButtonGroup>
           <ActionButton onClick={handleRetry}>🔁 다시 시도</ActionButton>
           <ActionButton onClick={handleSaveClick}>💾 결과 저장</ActionButton>
@@ -172,7 +231,6 @@ const PitchAnalysisPage = () => {
       </ListContainer>
       <Nav />
 
-      {/* 💬 제목 입력 모달 */}
       {isModalOpen && (
         <ModalOverlay>
           <ModalBox>
@@ -226,6 +284,23 @@ const AudioPlayer = styled.audio`
   height: 42px;
 `;
 
+const SegmentButtons = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+`;
+
+const SegmentButton = styled.button`
+  background-color: ${(props) => (props.$active ? "#9b7ed8" : "#333")};
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+`;
+
 const ChartWrapper = styled.div`
   position: relative;
   width: 100%;
@@ -249,7 +324,6 @@ const ActionButton = styled.button`
   flex: 1;
 `;
 
-// 🎨 Modal Styles
 const ModalOverlay = styled.div`
   position: fixed;
   top: 0;

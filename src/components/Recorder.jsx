@@ -4,31 +4,37 @@ import styled, { keyframes } from "styled-components";
 const Recorder = ({ onRecordingComplete }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [recordTime, setRecordTime] = useState(0);
-  const mediaRecorderRef = useRef(null);
-  const audioChunksRef = useRef([]);
+  const audioContextRef = useRef(null);
+  const processorRef = useRef(null);
+  const sourceRef = useRef(null);
+  const streamRef = useRef(null);
+  const audioDataRef = useRef([]);
   const timerRef = useRef(null);
 
   const startRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      mediaRecorderRef.current = new MediaRecorder(stream);
-      audioChunksRef.current = [];
+      audioContextRef.current = new (window.AudioContext ||
+        window.webkitAudioContext)();
+      streamRef.current = stream;
+      sourceRef.current =
+        audioContextRef.current.createMediaStreamSource(stream);
+      processorRef.current = audioContextRef.current.createScriptProcessor(
+        4096,
+        1,
+        1
+      );
 
-      mediaRecorderRef.current.ondataavailable = (event) => {
-        if (event.data.size > 0) {
-          audioChunksRef.current.push(event.data);
-        }
+      audioDataRef.current = [];
+
+      processorRef.current.onaudioprocess = (e) => {
+        const channelData = e.inputBuffer.getChannelData(0);
+        audioDataRef.current.push(new Float32Array(channelData));
       };
 
-      mediaRecorderRef.current.onstop = () => {
-        clearInterval(timerRef.current);
-        const audioBlob = new Blob(audioChunksRef.current, {
-          type: "audio/webm",
-        });
-        onRecordingComplete(audioBlob);
-      };
+      sourceRef.current.connect(processorRef.current);
+      processorRef.current.connect(audioContextRef.current.destination);
 
-      mediaRecorderRef.current.start();
       setIsRecording(true);
       setRecordTime(0);
       timerRef.current = setInterval(() => {
@@ -40,10 +46,76 @@ const Recorder = ({ onRecordingComplete }) => {
     }
   };
 
-  const stopRecording = () => {
-    mediaRecorderRef.current.stop();
+  const stopRecording = async () => {
+    clearInterval(timerRef.current);
+    processorRef.current.disconnect();
+    sourceRef.current.disconnect();
+    streamRef.current.getTracks().forEach((track) => track.stop());
+    audioContextRef.current.close();
+
+    // 녹음된 오디오 데이터를 병합하여 리샘플링 처리
+    const mergedAudioData = flattenAndEncodeWAV(audioDataRef.current, 44100);
+
+    // WAV 파일 생성
+    const audioBlob = new Blob([mergedAudioData], { type: "audio/wav" });
+
+    onRecordingComplete(audioBlob);
     setIsRecording(false);
   };
+
+  // Float32Array[] → WAV Blob
+  function flattenAndEncodeWAV(buffers, sampleRate) {
+    const merged = mergeBuffers(buffers);
+    return encodeWAV(merged, sampleRate);
+  }
+
+  function mergeBuffers(buffers) {
+    const length = buffers.reduce((acc, b) => acc + b.length, 0);
+    const result = new Float32Array(length);
+    let offset = 0;
+    for (let b of buffers) {
+      result.set(b, offset);
+      offset += b.length;
+    }
+    return result;
+  }
+
+  function encodeWAV(samples, sampleRate) {
+    const buffer = new ArrayBuffer(44 + samples.length * 2);
+    const view = new DataView(buffer);
+
+    const writeString = (offset, str) => {
+      for (let i = 0; i < str.length; i++) {
+        view.setUint8(offset + i, str.charCodeAt(i));
+      }
+    };
+
+    const numChannels = 1;
+    const bitsPerSample = 16;
+    const byteRate = (sampleRate * numChannels * bitsPerSample) / 8;
+
+    writeString(0, "RIFF");
+    view.setUint32(4, 36 + samples.length * 2, true);
+    writeString(8, "WAVE");
+    writeString(12, "fmt ");
+    view.setUint32(16, 16, true); // fmt chunk size
+    view.setUint16(20, 1, true); // PCM
+    view.setUint16(22, numChannels, true);
+    view.setUint32(24, sampleRate, true);
+    view.setUint32(28, byteRate, true);
+    view.setUint16(32, (numChannels * bitsPerSample) / 8, true);
+    view.setUint16(34, bitsPerSample, true);
+    writeString(36, "data");
+    view.setUint32(40, samples.length * 2, true);
+
+    let offset = 44;
+    for (let i = 0; i < samples.length; i++, offset += 2) {
+      let s = Math.max(-1, Math.min(1, samples[i]));
+      view.setInt16(offset, s * 0x7fff, true);
+    }
+
+    return new Uint8Array(buffer);
+  }
 
   return (
     <RecorderContainer>

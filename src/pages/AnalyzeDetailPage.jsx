@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Line } from "react-chartjs-2";
 import {
@@ -53,8 +53,10 @@ const AnalyzeDetailPage = () => {
   const [entry, setEntry] = useState(null);
   const [currentTime, setCurrentTime] = useState(0);
   const audioRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    // id를 기반으로 하는데 이것도 나중에 백엔드 사용자 데이터에서 가져올때 생성된 데이터의 고유 id로 비교하면 될듯?
     if (id) {
       const stored = JSON.parse(localStorage.getItem("voiceAnalysis")) || [];
       const found = stored.find((item) => item.id === id);
@@ -114,6 +116,10 @@ const AnalyzeDetailPage = () => {
     },
   };
 
+  const handleTagClick = (tag) => {
+    navigate(`/searchpage?query=${encodeURIComponent(tag)}`);
+  };
+
   return (
     <Container>
       <TopNavBack />
@@ -131,7 +137,7 @@ const AnalyzeDetailPage = () => {
           <SectionTitle>🎧 추천 노래</SectionTitle>
           <RecommendationList>
             {entry.recommendations.map((song, index) => (
-              <li key={index}>
+              <li key={index} onClick={() => handleTagClick(song.title)}>
                 • <strong>{song.title}</strong>{" "}
                 <span style={{ color: "#aaa" }}>- {song.artist}</span>
               </li>

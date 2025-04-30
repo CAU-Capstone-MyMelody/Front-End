@@ -1,8 +1,6 @@
 import axios from "axios";
 
-// const API_KEY = "AIzaSyBhXRLFb1DMWme0tpW2EZAjHrKTiRoPziw";
-const API_KEY = "AIzaSyAZiCAmcWUoYY1K1O56nbS-6T_1Me9hyq8"; // 테스트키2
-
+const YOUTUBE_API_KEY = process.env.REACT_APP_YOUTUBE_API_KEY2;
 const BASE_URL = "https://www.googleapis.com/youtube/v3";
 
 export const searchYouTube = async (query, maxResults = 30) => {
@@ -14,7 +12,7 @@ export const searchYouTube = async (query, maxResults = 30) => {
         type: "video",
         maxResults,
         order: "viewCount",
-        key: API_KEY,
+        key: YOUTUBE_API_KEY,
       },
     });
     console.log(searchRes.data.items);
@@ -30,7 +28,7 @@ export const searchYouTube = async (query, maxResults = 30) => {
         params: {
           part: "snippet,statistics",
           id: videoIds,
-          key: API_KEY,
+          key: YOUTUBE_API_KEY,
         },
       }
     );
@@ -49,7 +47,7 @@ export const getVideoDetail = async (videoId) => {
       params: {
         part: "snippet,statistics",
         id: videoId,
-        key: API_KEY,
+        key: YOUTUBE_API_KEY,
       },
     });
 
@@ -74,7 +72,7 @@ export const getPopularMusicByRegion = async (regionCode, maxResults = 10) => {
         regionCode,
         videoCategoryId: 10, // 음악 카테고리
         maxResults,
-        key: API_KEY,
+        key: YOUTUBE_API_KEY,
       },
     });
 
@@ -92,7 +90,7 @@ export const getChannelDetail = async (channelId) => {
     params: {
       part: "snippet",
       id: channelId,
-      key: API_KEY,
+      key: YOUTUBE_API_KEY,
     },
   });
   return response.data.items[0];

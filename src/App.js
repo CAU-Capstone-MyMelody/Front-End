@@ -18,6 +18,7 @@ import HistoryDetailPage from "./pages/HistoryDetailPage";
 import CoachingHistorySection from "./pages/CoachingHistorySection ";
 import AnalyzeHistroySection from "./pages/AnalyzeHistorySection";
 import AnalyzeDetailPage from "./pages/AnalyzeDetailPage";
+import GuideLinePage from "./pages/GuideLinePage";
 
 function App() {
   return (
@@ -26,6 +27,10 @@ function App() {
         <Routes>
           <Route path="/" element={<Home></Home>}></Route>
           <Route path="/analyze" element={<Analyze></Analyze>}></Route>
+          <Route
+            path="/guideline"
+            element={<GuideLinePage></GuideLinePage>}
+          ></Route>
           <Route
             path="/genre"
             element={<GenreSelection></GenreSelection>}

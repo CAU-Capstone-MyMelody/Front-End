@@ -1,0 +1,552 @@
+[
+  {
+    "title": "첫 만남은 계획대로 되지 않아",
+    "artist": "TWS (투어스)",
+    "genre": ["K-pop", "댄스"],
+    "videoId": "hVAc1Vf2ITU",
+    "pitch": {
+      "min": 261.0,
+      "max": 1046.5
+    }
+  },
+  {
+    "title": "나는 아픈 건 딱 질색이니까",
+    "artist": "(여자)아이들",
+    "genre": ["K-pop", "록/메탈", "랩/힙합", "댄스", "일렉트로니카"],
+    "videoId": "ATK7gAaZTOM",
+    "pitch": {
+      "min": 440.0,
+      "max": 1046.5
+    }
+  },
+  {
+    "title": "Supernova",
+    "artist": "aespa",
+    "genre": ["K-pop", "록/메탈", "발라드", "댄스", "R&B/Soul"],
+    "videoId": "phuiiNCxRMg",
+    "pitch": {
+      "min": 329.6,
+      "max": 739.9
+    }
+  },
+  {
+    "title": "Love wins all",
+    "artist": "아이유",
+    "genre": ["K-pop", "록/메탈", "발라드", "랩/힙합", "R&B/Soul"],
+    "videoId": "JleoAppaxi0",
+    "pitch": {
+      "min": 349.23,
+      "max": 1479.98
+    }
+  },
+  {
+    "title": "한 페이지가 될 수 있게",
+    "artist": "DAY6 (데이식스)",
+    "genre": ["K-pop", "록/메탈"],
+    "videoId": "vnS_jn2uibs",
+    "pitch": {
+      "min": 466.16,
+      "max": 1244.51
+    }
+  },
+  {
+    "title": "비의 랩소디",
+    "artist": "임재현",
+    "genre": ["K-pop", "발라드"],
+    "videoId": "TyCYGCCD6iQ",
+    "pitch": {
+      "min": 466.16,
+      "max": 1244.51
+    }
+  },
+  {
+    "title": "예뻤어",
+    "artist": "DAY6 (데이식스)",
+    "genre": ["K-pop", "록/메탈"],
+    "videoId": "BS7tz2rAOSA",
+    "pitch": {
+      "min": 246.94,
+      "max": 1046.5
+    }
+  },
+  {
+    "title": "Magnetic",
+    "artist": "아일릿(ILLIT)",
+    "genre": ["K-pop", "댄스"],
+    "videoId": "Vk5-c_v4gMU",
+    "pitch": {
+      "min": 415.3,
+      "max": 987.77
+    }
+  },
+  {
+    "title": "천상연",
+    "artist": "이창섭",
+    "genre": ["K-pop", "발라드"],
+    "videoId": "fQ84rvbfa08",
+    "pitch": {
+      "min": 277.18,
+      "max": 932.33
+    }
+  },
+  {
+    "title": "고민중독",
+    "artist": "QWER",
+    "genre": ["K-pop", "록/메탈", "댄스", "R&B/Soul"],
+    "videoId": "ImuWa3SJulY",
+    "pitch": {
+      "min": 246.94,
+      "max": 1318.51
+    }
+  },
+  {
+    "title": "To. X",
+    "artist": "태연 (TAEYEON)",
+    "genre": ["K-pop", "발라드", "R&B/Soul"],
+    "videoId": "5_n6t9G2TUQ",
+    "pitch": {
+      "min": 415.3,
+      "max": 1046.51
+    }
+  },
+  {
+    "title": "에피소드",
+    "artist": "이무진",
+    "genre": ["K-pop", "록/메탈"],
+    "videoId": "gH1rVdXUlpo",
+    "pitch": {
+      "min": 329.63,
+      "max": 932.33
+    }
+  },
+  {
+    "title": "그대만 있다면 (여름날 우리 X 너드커넥션 (Nerd Connection))",
+    "artist": "너드커넥션 (Nerd Connection)",
+    "genre": ["K-pop", "발라드"],
+    "videoId": "IMWT6937uUs",
+    "pitch": {
+      "min": 329.63,
+      "max": 880.0
+    }
+  },
+  {
+    "title": "소나기",
+    "artist": "이클립스 (ECLIPSE)",
+    "genre": ["K-pop", "국내드라마", "록/메탈", "발라드"],
+    "videoId": "fBB4MaBybyg",
+    "pitch": {
+      "min": 261.63,
+      "max": 987.77
+    }
+  },
+  {
+    "title": "How Sweet",
+    "artist": "NewJeans",
+    "genre": ["K-pop", "댄스"],
+    "videoId": "Q3K0TOvTOno",
+    "pitch": {
+      "min": 415.3,
+      "max": 932.33
+    }
+  },
+  {
+    "title": "밤양갱",
+    "artist": "비비 (BIBI)",
+    "genre": ["K-pop", "댄스", "R&B/Soul"],
+    "videoId": "smdmEhkIRVc",
+    "pitch": {
+      "min": 415.3,
+      "max": 1108.73
+    }
+  },
+  {
+    "title": "Welcome to the Show",
+    "artist": "DAY6 (데이식스)",
+    "genre": ["K-pop", "발라드", "록/메탈"],
+    "videoId": "RowlrvmyFEk",
+    "pitch": {
+      "min": 220.0,
+      "max": 880.0
+    }
+  },
+  {
+    "title": "헤어지자 말해요",
+    "artist": "박재정",
+    "genre": ["K-pop", "발라드"],
+    "videoId": "yFlxYHjHYAw",
+    "pitch": {
+      "min": 277.18,
+      "max": 1046.0
+    }
+  },
+  {
+    "title": "SPOT! (feat. JENNIE)",
+    "artist": "지코 (ZICO)",
+    "genre": ["K-pop", "랩/힙합"],
+    "videoId": "xfqBQ2XhBCg",
+    "pitch": {
+      "min": 466.16,
+      "max": 1046.0
+    }
+  },
+  {
+    "title": "Drama",
+    "artist": "aespa",
+    "genre": ["K-pop", "댄스", "발라드"],
+    "videoId": "D8VEhcPeSlc",
+    "pitch": {
+      "min": 415.3,
+      "max": 1318.51
+    }
+  },
+  {
+    "title": "I AM",
+    "artist": "IVE (아이브)",
+    "genre": ["K-pop", "댄스", "발라드"],
+    "videoId": "6ZUIwj3FgUY",
+    "pitch": {
+      "min": 293.66,
+      "max": 1567.98
+    }
+  },
+  {
+    "title": "인사",
+    "artist": "범진",
+    "genre": ["K-pop", "발라드", "인디음악"],
+    "videoId": "LP0lRsckX1A",
+    "pitch": {
+      "min": 329.63,
+      "max": 880.0
+    }
+  },
+  {
+    "title": "Hype Boy",
+    "artist": "NewJeans",
+    "genre": ["K-pop", "댄스", "R&B/Soul"],
+    "videoId": "11cta61wi0g",
+    "pitch": {
+      "min": 440.0,
+      "max": 1174.66
+    }
+  },
+  {
+    "title": "Perfect Night",
+    "artist": "LE SSERAFIM (르세라핌)",
+    "genre": ["K-pop", "댄스"],
+    "videoId": "hLvWy2b857I",
+    "pitch": {
+      "min": 523.25,
+      "max": 1318.51
+    }
+  },
+  {
+    "title": "Love 119",
+    "artist": "RIIZE",
+    "genre": ["K-pop", "댄스"],
+    "videoId": "0TAAUWHo4Ec",
+    "pitch": {
+      "min": 311.13,
+      "max": 880.0
+    }
+  },
+  {
+    "title": "해야 (HEYA)",
+    "artist": "IVE (아이브)",
+    "genre": ["K-pop", "댄스"],
+    "videoId": "07EzMbVH3QE",
+    "pitch": {
+      "min": 440.0,
+      "max": 1318.51
+    }
+  },
+  {
+    "title": "너의 모든 순간",
+    "artist": "성시경",
+    "genre": ["K-pop", "발라드", "국내드라마"],
+    "videoId": "Dbxzh078jr4",
+    "pitch": {
+      "min": 174.61,
+      "max": 987.77
+    }
+  },
+  {
+    "title": "Seven (feat. Latto)",
+    "artist": "정국",
+    "genre": ["K-pop", "댄스"],
+    "videoId": "QU9c0053UAU",
+    "pitch": {
+      "min": 415.3,
+      "max": 987.77
+    }
+  },
+  {
+    "title": "어떻게 이별까지 사랑하겠어, 널 사랑하는 거지",
+    "artist": "AKMU (악뮤)",
+    "genre": ["K-pop", "발라드", "록/메탈", "포크/블루스"],
+    "videoId": "m3DZsBw5bnE",
+    "pitch": {
+      "min": 196.0,
+      "max": 1318.51
+    }
+  },
+  {
+    "title": "미안해 미워해 사랑해",
+    "artist": "Crush",
+    "genre": ["K-pop", "발라드", "국내드라마"],
+    "videoId": "Z4qVfCi_lUI",
+    "pitch": {
+      "min": 246.94,
+      "max": 987.77
+    }
+  },
+  {
+    "title": "사랑은 늘 도망가",
+    "artist": "임영웅",
+    "genre": ["K-pop", "발라드", "국내드라마"],
+    "videoId": "Jr_2uyCJVUc",
+    "pitch": {
+      "min": 261.63,
+      "max": 830.61
+    }
+  },
+  {
+    "title": "Small girl (feat. 도경수(D.O.))",
+    "artist": "이영지",
+    "genre": ["K-pop", "랩/힙합"],
+    "videoId": "11iZcYbq_is",
+    "pitch": {
+      "min": 440.0,
+      "max": 1108.73
+    }
+  },
+  {
+    "title": "Ditto",
+    "artist": "NewJeans",
+    "genre": ["K-pop", "댄스"],
+    "videoId": "Km71Rr9K-Bw",
+    "pitch": {
+      "min": 369.99,
+      "max": 1108.73
+    }
+  },
+  {
+    "title": "사랑인가 봐",
+    "artist": "멜로망스",
+    "genre": ["K-pop", "국내드라마", "발라드"],
+    "videoId": "UoBsiQW23IY",
+    "pitch": {
+      "min": 311.13,
+      "max": 932.33
+    }
+  },
+  {
+    "title": "Bubble Gum",
+    "artist": "NewJeans",
+    "genre": ["K-pop", "댄스"],
+    "videoId": "ft70sAYrFyY",
+    "pitch": {
+      "min": 440.0,
+      "max": 1318.51
+    }
+  },
+  {
+    "title": "ETA",
+    "artist": "NewJeans",
+    "genre": ["K-pop", "댄스"],
+    "videoId": "jOTfBlKSQYY",
+    "pitch": {
+      "min": 466.16,
+      "max": 1108.73
+    }
+  },
+  {
+    "title": "Super Shy",
+    "artist": "NewJeans",
+    "genre": ["K-pop", "댄스"],
+    "videoId": "ArmDp-zijuc",
+    "pitch": {
+      "min": 466.16,
+      "max": 1046.5
+    }
+  },
+  {
+    "title": "HAPPY",
+    "artist": "DAY6 (데이식스)",
+    "genre": ["K-pop", "발라드", "록/메탈"],
+    "videoId": "2o1zdX72400",
+    "pitch": {
+      "min": 369.99,
+      "max": 987.76
+    }
+  },
+  {
+    "title": "사막에서 꽃을 피우듯",
+    "artist": "우디 (Woody)",
+    "genre": ["K-pop", "발라드"],
+    "videoId": "j4qaT26K80A",
+    "pitch": {
+      "min": 391.99,
+      "max": 783.99
+    }
+  },
+  {
+    "title": "주저하는 연인들을 위해",
+    "artist": "잔나비",
+    "genre": ["K-pop", "인디음악", "록/메탈"],
+    "videoId": "GpQ222I1ULc",
+    "pitch": {
+      "min": 329.22,
+      "max": 932.32
+    }
+  },
+  {
+    "title": "Armageddon",
+    "artist": "aespa",
+    "genre": ["K-pop", "댄스", "록/메탈", "R&B/Soul", "발라드"],
+    "videoId": "nFYwcndNuOY",
+    "pitch": {
+      "min": 440.0,
+      "max": 1046.5
+    }
+  },
+  {
+    "title": "Love Lee",
+    "artist": "AKMU (악뮤)",
+    "genre": ["K-pop", "댄스", "포크/블루스"],
+    "videoId": "EIz09kLzN9k",
+    "pitch": {
+      "min": 329.22,
+      "max": 1244.5
+    }
+  },
+  {
+    "title": "EASY",
+    "artist": "LE SSERAFIM (르세라핌)",
+    "genre": ["K-pop", "랩/힙합", "포크/블루스", "R&B/Soul", "록/메탈"],
+    "videoId": "bNKXxwOQYB8",
+    "pitch": {
+      "min": 391.99,
+      "max": 987.76
+    }
+  },
+  {
+    "title": "사건의 지평선",
+    "artist": "윤하 (YOUNHA)",
+    "genre": ["K-pop", "발라드", "R&B/Soul", "록/메탈"],
+    "videoId": "BBdC1rl5sKY",
+    "pitch": {
+      "min": 391.99,
+      "max": 1479.97
+    }
+  },
+  {
+    "title": "Get A Guitar",
+    "artist": "RIIZE",
+    "genre": ["K-pop", "댄스"],
+    "videoId": "iUw3LPM7OBU",
+    "pitch": {
+      "min": 329.62,
+      "max": 880.0
+    }
+  },
+  {
+    "title": "APT.",
+    "artist": "로제 (ROSÉ), Bruno Mars",
+    "genre": ["K-pop", "댄스"],
+    "videoId": "ekr2nIex040",
+    "pitch": {
+      "min": 440.0,
+      "max": 987.66
+    }
+  },
+  {
+    "title": "슬픈 초대장",
+    "artist": "순순희(지환)",
+    "genre": ["K-pop", "발라드", "인디음악"],
+    "videoId": "hkROGL9id6Y",
+    "pitch": {
+      "min": 246.94,
+      "max": 1046.5
+    }
+  },
+  {
+    "title": "모든 날, 모든 순간 (Every day, Every Moment)",
+    "artist": "폴킴",
+    "genre": ["K-pop", "발라드", "국내드라마"],
+    "videoId": "64uidOIH2vY",
+    "pitch": {
+      "min": 329.22,
+      "max": 830.6
+    }
+  },
+  {
+    "title": "취중고백",
+    "artist": "김민석",
+    "genre": ["K-pop", "발라드"],
+    "videoId": "VMQl78z1DiY",
+    "pitch": {
+      "min": 311.12,
+      "max": 1108.73
+    }
+  },
+  {
+    "title": "다정히 내 이름을 부르면",
+    "artist": "경서예지, 전건호",
+    "genre": ["K-pop", "발라드"],
+    "videoId": "YPvrhziJAno",
+    "pitch": {
+      "min": 293.66,
+      "max": 1479.97
+    }
+  },
+  {
+    "title": "퀸카 (Queencard)",
+    "artist": "(여자)아이들",
+    "genre": ["K-pop", "발라드", "댄스"],
+    "videoId": "7HDeem-JaSY",
+    "pitch": {
+      "min": 391.99,
+      "max": 987.76
+    }
+  },
+  {
+    "title": "MANIAC",
+    "artist": "VIVIZ (비비지)",
+    "genre": ["K-pop", "R&B/Soul", "댄스"],
+    "videoId": "nFHG0TeBIIs",
+    "pitch": {
+      "min": 440.0,
+      "max": 1174.65
+    }
+  },
+  {
+    "title": "꿈",
+    "artist": "태연 (TAEYEON)",
+    "genre": ["K-pop", "발라드", "국내드라마"],
+    "videoId": "dMaU3Mj7EVY",
+    "pitch": {
+      "min": 493.88,
+      "max": 1046.5
+    }
+  },
+  {
+    "title": "Spicy",
+    "artist": "aespa",
+    "genre": ["K-pop", "발라드", "댄스", "R&B/Soul"],
+    "videoId": "dMaU3Mj7EVY",
+    "pitch": {
+      "min": 415.3,
+      "max": 1244.5
+    }
+  },
+  {
+    "title": "파이팅 해야지 (Feat. 이영지)",
+    "artist": "부석순 (SEVENTEEN) ",
+    "genre": ["K-pop", "댄스", "R&B/Soul"],
+    "videoId": "mBXBOLG06Wc",
+    "pitch": {
+      "min": 146.83,
+      "max": 987.76
+    }
+  }
+]

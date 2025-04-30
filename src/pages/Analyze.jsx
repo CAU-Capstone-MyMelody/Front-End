@@ -13,22 +13,29 @@ const Analyze = () => {
         <ExplanationText>
           <h2>음성 분석 및 음악 추천</h2>
           <p>
-            여기에서 여러분의 음성을 녹음하고, 음성의 피치를 분석하여 그에 맞는
-            음악을 추천해드립니다. 분석된 결과는 여러분의 음성의 피치(음정) 및
-            스펙트럼 특성에 기반하여 제공됩니다.
+            이곳곳에서 여러분의 음성을 녹음하고, 음성의 피치(음정)를 분석하여
+            그에 맞는 음악을 추천해드립니다. 분석된 결과는 여러분의 음성의
+            피치(음정) 및 스펙트럼 특성에 기반하여 제공됩니다.
           </p>
           <p>
             Librosa를 통해 피치(음정)를 분석하고, ChatGPT를 활용하여 음악을
             추천해 드립니다.
           </p>
+          <p>
+            ☑️ <strong>테스트 전 준비사항</strong>
+            <br />
+            <br />● 조용한 환경에서 테스트 진행
+            <br />● 이어폰/헤드셋 사용 권장
+            <br />● 충분한 호흡 후 편안하게 소리 내기
+          </p>
         </ExplanationText>
 
         <CoachBtn
           onClick={() => {
-            navigate("/genre");
+            navigate("/guideline");
           }}
         >
-          <StartRecordingButton>분석</StartRecordingButton>
+          <StartRecordingButton>시작</StartRecordingButton>
         </CoachBtn>
       </ListContainer>
       <Nav />

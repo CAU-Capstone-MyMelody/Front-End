@@ -15,6 +15,7 @@ const AnalyzeHistroySection = () => {
 
   const handleClick = (item) => {
     navigate("/analysis-detail", { state: item });
+    console.log(item);
   };
 
   return (

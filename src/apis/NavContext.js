@@ -19,6 +19,7 @@ export const NavProvider = ({ children }) => {
     const pathMap = {
       "/": 0,
       "/analyze": 1,
+      "/guideline": 1,
       "/genre": 1,
       "/singlerecord": 1,
       "/chart": 2,

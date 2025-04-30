@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import Nav from "../components/Nav";
 import { Line } from "react-chartjs-2";
 import {
@@ -12,6 +12,7 @@ import {
 } from "chart.js";
 import TopNavBack from "../components/TopNavBack";
 import { fetchChatGptRecommendation } from "../apis/chatgpt";
+import resultJson from "../data/pitch_results.json"; // JSON 파일 경로에 맞게 수정
 
 // 재생 위치 수직 선
 const verticalLinePlugin = {
@@ -71,7 +72,7 @@ const SinglePitchAnalysisPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [customTitle, setCustomTitle] = useState("");
 
-  const { time, recordedPitch, note, audioBlob, selectedGenres } =
+  const { time, recordedPitch, note, audioBlob, selectedGenres, transpose } =
     location.state || {};
 
   useEffect(() => {
@@ -95,12 +96,78 @@ const SinglePitchAnalysisPage = () => {
 
   useEffect(() => {
     let timeoutId;
-    if (recordedPitch && selectedGenres && !analysisResult) {
+    console.log(recordedPitch, selectedGenres, note, transpose);
+
+    // 최저음과 최고음을 계산합니다.
+    const minPitch = Math.min(...recordedPitch);
+    const maxPitch = Math.max(...recordedPitch);
+
+    // Transpose 값을 반영하는 함수 (키를 내리기)
+    const transposeFrequencyDown = (frequency, transposeValue) => {
+      // transposeValue가 1이면 1키 내리기, 2이면 2키 내리기
+      return frequency / Math.pow(1.05946, transposeValue);
+    };
+
+    // JSON의 노래마다 최대음을 Transpose를 적용해서 새로운 maxPitch 값을 계산합니다.
+    const transposedSongs = resultJson.map((song) => {
+      const transposedMax = transposeFrequencyDown(song.pitch.max, transpose); // song의 최대 음에 Transpose 적용
+      return {
+        ...song,
+        pitch: {
+          ...song.pitch,
+          transposedMax: transposedMax,
+        },
+      };
+    });
+
+    console.log(transposedSongs);
+    // 장르 겹치는 수 + 음역대 기준으로 필터링 후 정렬
+    const filteredAndSortedSongs = transposedSongs
+      .map((song) => {
+        const genreMatches = song.genre.filter((g) =>
+          selectedGenres.includes(g)
+        );
+        const matchCount = genreMatches.length;
+
+        return {
+          ...song,
+          matchCount,
+        };
+      })
+      .filter((song) => {
+        const songMin = song.pitch.min;
+        const songMax = song.pitch.transposedMax;
+
+        return (
+          song.matchCount > 0 && songMin >= minPitch && songMax <= maxPitch
+        );
+      })
+      .sort((a, b) => b.matchCount - a.matchCount); // 겹치는 장르 수 내림차순 정렬
+
+    console.log(filteredAndSortedSongs);
+
+    if (
+      recordedPitch &&
+      selectedGenres &&
+      !analysisResult &&
+      filteredAndSortedSongs
+    ) {
       timeoutId = setTimeout(() => {
-        fetchChatGptRecommendation(recordedPitch, selectedGenres, note)
+        console.log(transposedSongs);
+        console.log("추천된 노래: ", filteredAndSortedSongs);
+        fetchChatGptRecommendation(
+          recordedPitch,
+          selectedGenres,
+          note,
+          transpose,
+          filteredAndSortedSongs
+        )
           .then((res) => {
             setAnalysisResult(res.analysis);
             setRecommendations(res.recommendations);
+
+            console.log(res.analysis);
+            console.log(res.recommendations);
           })
           .catch((err) => {
             console.error("ChatGPT 요청 실패: ", err);
@@ -108,7 +175,7 @@ const SinglePitchAnalysisPage = () => {
       }, 1000);
     }
     return () => clearTimeout(timeoutId);
-  }, [recordedPitch, selectedGenres]);
+  }, [recordedPitch, selectedGenres, transpose, note]);
 
   const handleSaveClick = () => {
     setIsModalOpen(true);
@@ -193,6 +260,8 @@ const SinglePitchAnalysisPage = () => {
         borderColor: "#9b7ed8",
         backgroundColor: "#9b7ed8",
         tension: 0.3,
+        pointRadius: 1, // 🔽 포인트 작게
+        borderWidth: 2, // 🔽 선 얇게
       },
     ],
   };
@@ -226,6 +295,19 @@ const SinglePitchAnalysisPage = () => {
         <ChartWrapper>
           <Line data={data} options={options} />
         </ChartWrapper>
+
+        {!analysisResult && recommendations.length === 0 && (
+          <AnalysisWrapper>
+            <LoadingContainer>
+              <Spinner />
+              <DotLoadingText>음성 분석 중</DotLoadingText>
+              <p>
+                ChatGPT가 당신의 음성을 분석하고 있어요. 잠시만 기다려 주세요!
+                🎧
+              </p>
+            </LoadingContainer>
+          </AnalysisWrapper>
+        )}
 
         {analysisResult && (
           <>
@@ -349,6 +431,7 @@ const SaveButton = styled.button`
   border-radius: 8px;
   font-size: 1rem;
   cursor: pointer;
+  width: 100%;
 `;
 
 // 🎨 Modal Styles
@@ -405,7 +488,7 @@ const ModalButton = styled.button`
 // 스타일드 컴포넌트 추가
 const Section = styled.div`
   margin-top: 2rem;
-  background-color: #111;
+
   border-radius: 10px;
   color: #ccc;
 `;
@@ -426,4 +509,46 @@ const RecommendationList = styled.ul`
   li {
     margin-bottom: 0.3rem;
   }
+`;
+
+const spin = keyframes`
+  to {
+    transform: rotate(360deg);
+  }
+`;
+
+const LoadingContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem 1rem;
+  text-align: center;
+`;
+
+const dotAnimation = keyframes`
+  0%   { content: "."; }
+  25%  { content: ".."; }
+  50%  { content: "..."; }
+  100% { content: "."; }
+`;
+
+const DotLoadingText = styled.h3`
+  position: relative;
+  font-size: 1.25rem;
+  &::after {
+    content: "";
+    display: inline-block;
+    margin-left: 4px;
+    animation: ${dotAnimation} 2s steps(3, end) infinite;
+  }
+`;
+
+const Spinner = styled.div`
+  width: 48px;
+  height: 48px;
+  border: 6px solid #9b7ed8;
+  border-top: 6px solid transparent;
+  border-radius: 50%;
+  animation: ${spin} 1s linear infinite;
 `;
