@@ -14,7 +14,7 @@ export const NavProvider = ({ children }) => {
   const [activeNav, setActiveNav] = useState(0); // 로컬 스토리지에서 값을 가져오거나 기본값 0
 
   useEffect(() => {
-    const pathname = location;
+    // const pathname = location;
 
     const pathMap = {
       "/": 0,
