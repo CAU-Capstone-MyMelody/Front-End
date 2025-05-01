@@ -90,6 +90,12 @@ const VideoDetailPage = () => {
             &nbsp;음정 코칭
           </StartCoachingButton>
         </CoachBtn>
+        <CoachBtn onClick={() => navigate(`/mergekaraoke?videoId=${videoId}`)}>
+          <StartCoachingButton>
+            <img src="/icon/MicBlank.png" alt="Mic" />
+            &nbsp;노래 합성하기
+          </StartCoachingButton>
+        </CoachBtn>
       </ListContainer>
       <Nav />
     </Container>

@@ -19,6 +19,7 @@ import CoachingHistorySection from "./pages/CoachingHistorySection ";
 import AnalyzeHistroySection from "./pages/AnalyzeHistorySection";
 import AnalyzeDetailPage from "./pages/AnalyzeDetailPage";
 import GuideLinePage from "./pages/GuideLinePage";
+import MergeKaraokePage from "./pages/MergeKaraokePage";
 
 function App() {
   return (
@@ -51,6 +52,7 @@ function App() {
           ></Route>
           <Route path="/video/:videoId" element={<VideoDetailPage />} />
           <Route path="/vocalrecord" element={<VocalRecordPage />} />
+          <Route path="/mergekaraoke" element={<MergeKaraokePage />} />
           <Route path="/pitchanalysis" element={<PitchAnalysisPage />} />
           <Route
             path="/coaching-history"

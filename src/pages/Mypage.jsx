@@ -27,7 +27,7 @@ const Mypage = () => {
     <Container>
       <TopNav />
       <ListContainer>
-        <Section>
+        {/* <Section>
           <SectionHeader>
             <SectionTitle>👤 내 정보</SectionTitle>
           </SectionHeader>
@@ -36,7 +36,7 @@ const Mypage = () => {
             <p>가입일: 2024-01-01</p>
             <p>분석 횟수: {coachingHistory.length}</p>
           </UserInfo>
-        </Section>
+        </Section> */}
 
         <Section>
           <SectionHeader>

@@ -60,7 +60,9 @@ const AnalyzeDetailPage = () => {
     if (id) {
       const stored = JSON.parse(localStorage.getItem("voiceAnalysis")) || [];
       const found = stored.find((item) => item.id === id);
-      if (found) setEntry(found);
+      if (found) {
+        setEntry(found);
+      }
     }
   }, [id]);
 

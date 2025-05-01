@@ -23,7 +23,7 @@ const AnalyzeHistroySection = () => {
       <TopNavBack></TopNavBack>
       <ListContainer>
         <Section>
-          <h2>🎤 음성 분석 히스토리</h2>
+          <h2>📊 음성 분석 히스토리</h2>
           <List>
             {history.map((item) => (
               <ListItem key={item.id} onClick={() => handleClick(item)}>
@@ -35,7 +35,7 @@ const AnalyzeHistroySection = () => {
               </ListItem>
             ))}
           </List>
-        </Section>{" "}
+        </Section>
       </ListContainer>
       <Nav></Nav>
     </Container>

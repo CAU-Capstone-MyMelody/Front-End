@@ -22,7 +22,11 @@ const GuideLinePage = () => {
             위의 사진은 예시일뿐 사진의 계이름 음정과 맞추실 필요는 없습니다.
           </p>
           <p>음이 끊기지 계속 이어져가야됩니다.</p>
-          <Tip>💡마지막 최고음을 2초 유지한 뒤 녹음을 종료해주세요</Tip>
+          <p>마지막 최고음을 2초 유지한 뒤 녹음을 종료해주세요</p>
+          <TipNotice>
+            최대 <span>30초</span> 내외로 녹음을 해주세요
+          </TipNotice>
+          <Tip>💡노래의 한 소절을 불러서 제공해주셔도 됩니다</Tip>
         </Section>
 
         <CoachBtn>
@@ -108,6 +112,13 @@ const Section = styled.div`
 const Tip = styled.p`
   font-size: 0.9rem;
   color: #9b7ed8;
+  margin-top: 0.5rem;
+`;
+const TipNotice = styled.p`
+  span {
+    color: red;
+    font-weight: bold;
+  }
   margin-top: 0.5rem;
 `;
 

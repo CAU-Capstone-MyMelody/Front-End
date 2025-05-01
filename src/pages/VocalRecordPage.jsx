@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Recorder from "../components/Recorder";
 import { fakeVocalAnalysis } from "../utils/fakeVocalAnalysis";
@@ -6,12 +6,6 @@ import styled from "styled-components";
 import Nav from "../components/Nav";
 import TopNavBack from "../components/TopNavBack";
 import axios from "axios";
-
-const dummyAnalysisResult = {
-  time: [0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0],
-  originalPitch: [329.63, 329.63, 349.23, 349.23, 392.0, 392.0, 440.0], // E4, E4, F4, F4, G4, G4, A4
-  recordedPitch: [320.0, 335.0, 360.0, 340.0, 405.0, 380.0, 450.0], // 사용자 음정(살짝 부정확)
-};
 
 const dummyAnalysisResult2 = {
   time: [
@@ -43,8 +37,10 @@ const dummyAnalysisResult2 = {
     415, 418, 420, 422, 425, 428, 430, 432, 438, 442, 445, 450, 452, 455, 458,
     460, 462, 465, 468, 470, 475, 478, 480, 482, 485, 490, 492, 495, 498, 500,
     502, 505, 508, 510, 512, 515, 518, 520, 522, 525, 528, 530, 532, 535, 538,
-    540, 542, 545, 548, 550, 550, 548, 545, 542, 540, 538,
+    550,
   ],
+  startTime: 10,
+  endTime: 60,
 };
 
 const VocalRecordPage = () => {
@@ -53,6 +49,111 @@ const VocalRecordPage = () => {
   const videoId = new URLSearchParams(search).get("videoId");
   const [audioBlob, setAudioBlob] = useState(null);
 
+  // 녹음 파일로 오디오 분석
+  const [audioFileName, setAudioFileName] = useState("");
+
+  const [isRecorded, setIsRecorded] = useState(false);
+
+  const [audioUrl, setAudioUrl] = useState(null);
+
+  const [videoTitle, setVideoTitle] = useState("");
+  const [videoDescription, setVideoDescription] = useState("");
+  const [isDescriptionLoading, setIsDescriptionLoading] = useState(true);
+  const [isShow, setIsShow] = useState(false);
+
+  // 비디오 제목을 YouTube API로 가져오기
+  useEffect(() => {
+    const fetchVideoTitle = async () => {
+      const API_KEY = process.env.REACT_APP_YOUTUBE_API_KEY2; // API 키는 환경 변수로 관리하는 게 좋습니다.
+      const url = `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${API_KEY}`;
+
+      try {
+        const response = await axios.get(url);
+        const title =
+          response.data.items[0]?.snippet?.title ||
+          "제목을 가져오지 못했습니다.";
+        setVideoTitle(title);
+      } catch (error) {
+        console.error("YouTube API 요청 실패:", error);
+        setVideoTitle("제목을 가져오지 못했습니다.");
+      }
+    };
+
+    fetchVideoTitle();
+  }, [videoId]);
+
+  // 페이지 로드 시 비디오 제목을 기반으로 ChatGPT에게 설명 요청
+  useEffect(() => {
+    if (!videoTitle) return;
+
+    const fetchGPTDescription = async () => {
+      const OPENAI_API_KEY = process.env.REACT_APP_OPENAI_API_KEY;
+      if (!OPENAI_API_KEY) {
+        console.error("OpenAI API 키가 설정되어 있지 않습니다.");
+        setVideoDescription("설명을 가져오지 못했습니다.");
+        setIsDescriptionLoading(false);
+        return;
+      }
+
+      const prompt = `이 유튜브 영상에 대해 설명해 주세요. 가수와 노래 제목을 포함하여 설명하며 해당 노래의 멜론이나 유튜브 뮤직, 빌보드 등의 흥행 정도에 대해서도 설명해 주세요: ${videoTitle}`;
+
+      try {
+        const response = await axios.post(
+          "https://api.openai.com/v1/chat/completions",
+          {
+            model: "gpt-3.5-turbo",
+            messages: [{ role: "user", content: prompt }],
+            temperature: 0.7,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${OPENAI_API_KEY}`,
+            },
+          }
+        );
+
+        const message = response.data.choices?.[0]?.message?.content;
+        if (message) {
+          setVideoDescription(message.trim());
+        } else {
+          setVideoDescription("설명을 가져오지 못했습니다.");
+        }
+      } catch (error) {
+        console.error("ChatGPT 요청 실패:", error);
+        setVideoDescription("설명을 가져오지 못했습니다.");
+      } finally {
+        setIsDescriptionLoading(false);
+      }
+    };
+
+    fetchGPTDescription();
+  }, [videoTitle]);
+
+  useEffect(() => {
+    if (!audioBlob) return;
+    const url = URL.createObjectURL(audioBlob);
+    setAudioUrl(url);
+    return () => URL.revokeObjectURL(url); // ⬅ 메모리 해제
+  }, [audioBlob]);
+
+  // 파일 업로드 시
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("audio/")) {
+      alert("오디오 파일만 업로드 가능합니다.");
+      return;
+    }
+
+    setAudioBlob(file);
+    setAudioFileName(file.name);
+    setIsRecorded(false); // 업로드한 경우는 녹음이 아님
+
+    e.target.value = ""; // 🔥 핵심! 같은 파일 재선택 방지
+  };
+
   // 나중에 백엔드와 연결할떄 쓸 코드
   const handleAnalyze = async () => {
     if (!audioBlob) {
@@ -60,10 +161,17 @@ const VocalRecordPage = () => {
       return;
     }
 
+    setIsShow(true);
+
     try {
       const formData = new FormData();
-      formData.append("file", audioBlob, "recording.wav"); // 파일 이름 설정
-      formData.append("youtube_url", videoId);
+      formData.append("file", audioBlob, audioBlob.name); // 파일 이름 설정
+      formData.append(
+        "youtube_url",
+        `https://www.youtube.com/watch?v=${videoId}`
+      );
+
+      console.log(formData.get("file"));
 
       const response = await axios.post(
         "http://3.39.217.34:8000/analyze_dtw",
@@ -76,6 +184,8 @@ const VocalRecordPage = () => {
       );
 
       const { time, recordedPitch, originalPitch } = response.data;
+
+      console.log(response.data);
 
       navigate("/pitchanalysis", {
         state: {
@@ -118,10 +228,36 @@ const VocalRecordPage = () => {
         <ContentWrapper>
           <RecordBox>
             <Recorder onRecordingComplete={setAudioBlob} />
-            {audioBlob && (
-              <AudioPlayer controls src={URL.createObjectURL(audioBlob)} />
+
+            {/* 🔽 오디오 파일 업로드 UI */}
+            <UploadLabel htmlFor="audio-upload">
+              또는 오디오 파일 업로드
+            </UploadLabel>
+            <FileInput
+              id="audio-upload"
+              type="file"
+              accept="audio/*"
+              onChange={handleFileUpload}
+            />
+            {audioFileName && !isRecorded && (
+              <FileName>📁 {audioFileName}</FileName>
             )}
+            {audioUrl && <AudioPlayer key={audioUrl} controls src={audioUrl} />}
           </RecordBox>
+
+          {/* 비디오 설명을 보여주는 부분 */}
+          {isShow && (
+            <DescriptionWrapper>
+              <h3>이 영상에 대한 설명</h3>
+              {isDescriptionLoading ? (
+                <p>설명이 로드 중입니다...</p>
+              ) : videoDescription ? (
+                <p>{videoDescription}</p>
+              ) : (
+                <p>설명이 없습니다.</p>
+              )}
+            </DescriptionWrapper>
+          )}
 
           <ActionButton onClick={handleAnalyze}>🎧 분석하기</ActionButton>
         </ContentWrapper>
@@ -147,11 +283,22 @@ const ListContainer = styled.div`
   overflow-y: auto;
   height: 100%;
   max-height: calc(100% - 100px);
-
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(150, 150, 150);
+    border-radius: 10px;
+  }
+  &::-webkit-scrollbar-track {
+    background: rgba(150, 150, 150, 0.1);
+  }
 `;
 
 const ContentWrapper = styled.div`
@@ -194,4 +341,43 @@ const AudioPlayer = styled.audio`
   margin-top: 1rem;
   width: 100%;
   height: 42px;
+`;
+
+const UploadLabel = styled.label`
+  display: inline-block;
+  background-color: #1e1e1e;
+  color: #9b7ed8;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 1rem;
+  border: 1px solid #9b7ed8;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #2a2a2a;
+  }
+`;
+
+const FileInput = styled.input`
+  display: none;
+`;
+
+const FileName = styled.div`
+  font-size: 0.85rem;
+  color: #aaa;
+  margin-top: 0.5rem;
+  text-align: center;
+`;
+
+const DescriptionWrapper = styled.div`
+  margin-top: 2rem;
+  color: white;
+  font-size: 1rem;
+  font-weight: 400;
+  padding: 1rem;
+  background-color: #1e1e1e;
+  border-radius: 10px;
 `;

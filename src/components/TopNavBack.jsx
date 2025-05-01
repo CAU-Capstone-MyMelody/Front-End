@@ -284,6 +284,19 @@ const HistoryContainer = styled.div`
   box-sizing: border-box;
   overflow-y: auto;
   max-height: 200px;
+
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(150, 150, 150);
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(150, 150, 150, 0.1);
+  }
 `;
 
 const HistoryItem = styled.div`

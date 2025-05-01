@@ -42,6 +42,8 @@ const HistoryDetailPage = () => {
   const audioRef = useRef(null);
   const [currentTime, setCurrentTime] = useState(0);
 
+  const [selectedSegment, setSelectedSegment] = useState(null);
+
   useEffect(() => {
     const interval = setInterval(() => {
       if (audioRef.current) {
@@ -50,6 +52,39 @@ const HistoryDetailPage = () => {
     }, 100);
     return () => clearInterval(interval);
   }, []);
+
+  const duration = time.length ? time[time.length - 1] : 0;
+
+  // 🔢 구간 나누기
+  const segments = [];
+  const step = 30;
+  for (let i = 0; i < duration; i += step) {
+    segments.push({ start: i, end: Math.min(i + step, duration) });
+  }
+
+  // 🎵 구간 필터링
+  const getFilteredData = () => {
+    if (!selectedSegment) {
+      return { labels: time, recorded: recordedPitch, original: originalPitch };
+    }
+
+    const { start, end } = selectedSegment;
+    const filtered = time.reduce(
+      (acc, t, idx) => {
+        if (t >= start && t <= end) {
+          acc.labels.push(t);
+          acc.recorded.push(recordedPitch[idx]);
+          acc.original.push(originalPitch[idx]);
+        }
+        return acc;
+      },
+      { labels: [], recorded: [], original: [] }
+    );
+
+    return filtered;
+  };
+
+  const filtered = getFilteredData();
 
   const data = {
     labels: time,
@@ -106,6 +141,23 @@ const HistoryDetailPage = () => {
           </YouTubeWrapper>
         )}
         <AudioPlayer ref={audioRef} controls src={audio} />
+        <SegmentButtons>
+          <SegmentButton
+            onClick={() => setSelectedSegment(null)}
+            $active={selectedSegment === null}
+          >
+            전체
+          </SegmentButton>
+          {segments.map((seg, idx) => (
+            <SegmentButton
+              key={idx}
+              onClick={() => setSelectedSegment(seg)}
+              $active={selectedSegment?.start === seg.start}
+            >
+              {seg.start}~{seg.end}s
+            </SegmentButton>
+          ))}
+        </SegmentButtons>
         <ChartWrapper>
           <Line data={data} options={options} />
         </ChartWrapper>{" "}
@@ -179,4 +231,21 @@ const ChartWrapper = styled.div`
   width: 100%;
   height: 300px;
   margin-top: 1rem;
+`;
+
+const SegmentButtons = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+`;
+
+const SegmentButton = styled.button`
+  background-color: ${(props) => (props.$active ? "#9b7ed8" : "#333")};
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
 `;
