@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getChannelDetail, getVideoDetail } from "../apis/youtubeapi";
-import TopNav from "../components/TopNav";
 import Nav from "../components/Nav";
 import styled from "styled-components";
 import TopNavBack from "../components/TopNavBack";
