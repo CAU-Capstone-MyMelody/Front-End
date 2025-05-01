@@ -20,7 +20,7 @@ const Nav = () => {
       <IconList>
         <IconButton onClick={() => handleNavClick(0, "/")}>
           <img
-            src={activeNav === 0 ? "/icon/HomeFill.png" : "/img/homeBlank.png"}
+            src={activeNav === 0 ? "/icon/HomeFill.png" : "/icon/HomeBlank.png"}
             alt="Home"
           />
           <span>홈</span>
@@ -41,7 +41,7 @@ const Nav = () => {
           />
           <span>차트</span>
         </IconButton>
-        <IconButton onClick={() => handleNavClick(3, "/userpage")}>
+        <IconButton onClick={() => handleNavClick(3, "/mypage")}>
           <img
             src={activeNav === 3 ? "/icon/UserFill.png" : "/icon/UserBlank.png"}
             alt="User"
@@ -63,6 +63,7 @@ const Container = styled.div`
   max-height: 50px;
   // height: 8vh; // 네비게이션 바의 높이를 화면 비율에 맞춰 설정 (전체 화면의 10%)
   height: 50px; // 네비게이션 바의 높이를 화면 비율에 맞춰 설정 (전체 화면의 10%)
+  border-top: 1px solid #282828;
 
   background-color: #090909;
   display: flex;

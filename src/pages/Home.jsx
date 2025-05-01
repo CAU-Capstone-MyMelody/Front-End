@@ -1,47 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Nav from "../components/Nav";
 import TopNav from "../components/TopNav";
+import { useNavContext } from "../apis/NavContext";
+import MusicSection from "../components/MusicSection";
 
 const Home = () => {
+  const { setActiveNav } = useNavContext();
+
+  useEffect(() => {
+    setActiveNav(0);
+  }, []);
+
   return (
     <Container>
       <TopNav></TopNav>
       <ListContainer>
-        죽는 날까지 하늘을 우러러 한 점 부끄럼이 없기를, 잎새에 이는 바람에도
-        나는 괴로워했다. 별을 노래하는 마음으로 모든 죽어 가는 것을 사랑해야지
-        그리고 나한테 주어진 길을 걸어가야겠다. 오늘 밤에도 별이 바람에
-        스치운다. 죽는 날까지 하늘을 우러러 한 점 부끄럼이 없기를, 잎새에 이는
-        바람에도 나는 괴로워했다. 별을 노래하는 마음으로 모든 죽어 가는 것을
-        사랑해야지 그리고 나한테 주어진 길을 걸어가야겠다. 오늘 밤에도 별이
-        바람에 스치운다. 죽는 날까지 하늘을 우러러 한 점 부끄럼이 없기를, 잎새에
-        이는 바람에도 나는 괴로워했다. 별을 노래하는 마음으로 모든 죽어 가는
-        것을 사랑해야지 그리고 나한테 주어진 길을 걸어가야겠다. 오늘 밤에도 별이
-        바람에 스치운다. 죽는 날까지 하늘을 우러러 한 점 부끄럼이 없기를, 잎새에
-        이는 바람에도 나는 괴로워했다. 별을 노래하는 마음으로 모든 죽어 가는
-        것을 사랑해야지 그리고 나한테 주어진 길을 걸어가야겠다. 오늘 밤에도 별이
-        바람에 스치운다. 죽는 날까지 하늘을 우러러 한 점 부끄럼이 없기를, 잎새에
-        이는 바람에도 나는 괴로워했다. 별을 노래하는 마음으로 모든 죽어 가는
-        것을 사랑해야지 그리고 나한테 주어진 길을 걸어가야겠다. 오늘 밤에도 별이
-        바람에 스치운다. 죽는 날까지 하늘을 우러러 한 점 부끄럼이 없기를, 잎새에
-        이는 바람에도 나는 괴로워했다. 별을 노래하는 마음으로 모든 죽어 가는
-        것을 사랑해야지 그리고 나한테 주어진 길을 걸어가야겠다. 오늘 밤에도 별이
-        바람에 스치운다. 죽는 날까지 하늘을 우러러 한 점 부끄럼이 없기를, 잎새에
-        이는 바람에도 나는 괴로워했다. 별을 노래하는 마음으로 모든 죽어 가는
-        것을 사랑해야지 그리고 나한테 주어진 길을 걸어가야겠다. 오늘 밤에도 별이
-        바람에 스치운다. 죽는 날까지 하늘을 우러러 한 점 부끄럼이 없기를, 잎새에
-        이는 바람에도 나는 괴로워했다. 별을 노래하는 마음으로 모든 죽어 가는
-        것을 사랑해야지 그리고 나한테 주어진 길을 걸어가야겠다. 오늘 밤에도 별이
-        바람에 스치운다. 죽는 날까지 하늘을 우러러 한 점 부끄럼이 없기를, 잎새에
-        이는 바람에도 나는 괴로워했다. 별을 노래하는 마음으로 모든 죽어 가는
-        것을 사랑해야지 그리고 나한테 주어진 길을 걸어가야겠다. 오늘 밤에도 별이
-        바람에 스치운다. 죽는 날까지 하늘을 우러러 한 점 부끄럼이 없기를, 잎새에
-        이는 바람에도 나는 괴로워했다. 별을 노래하는 마음으로 모든 죽어 가는
-        것을 사랑해야지 그리고 나한테 주어진 길을 걸어가야겠다. 오늘 밤에도 별이
-        바람에 스치운다. 죽는 날까지 하늘을 우러러 한 점 부끄럼이 없기를, 잎새에
-        이는 바람에도 나는 괴로워했다. 별을 노래하는 마음으로 모든 죽어 가는
-        것을 사랑해야지 그리고 나한테 주어진 길을 걸어가야겠다. 오늘 밤에도 별이
-        바람에 스치운다.
+        <MusicSection
+          title="🇰🇷🎧 지금 한국에서 인기 있는 음악"
+          regionCode="KR"
+        />
+        <MusicSection title="🇯🇵🎌 요즘 일본에서 뜨는 음악" regionCode="JP" />
+        <MusicSection title="🇺🇸🔥 미국에서 많이 듣는 음악" regionCode="US" />
       </ListContainer>
       <Nav></Nav>
     </Container>
@@ -60,7 +40,7 @@ const Container = styled.div`
 const ListContainer = styled.div`
   position: relative;
   top: 50px;
-  background-color: #f8f8f8;
+  background-color: #090909;
   padding: 0.5rem;
   overflow-y: auto;
   height: 100%;
