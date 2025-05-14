@@ -19,6 +19,7 @@ import AnalyzeHistroySection from "./pages/AnalyzeHistorySection";
 import AnalyzeDetailPage from "./pages/AnalyzeDetailPage";
 import GuideLinePage from "./pages/GuideLinePage";
 import MergeKaraokePage from "./pages/MergeKaraokePage";
+import PitchAnalysisPageSheet from "./pages/PitchAnalysisPageSheet";
 
 function App() {
   return (

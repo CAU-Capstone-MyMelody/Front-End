@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Recorder from "../components/Recorder";
 import styled from "styled-components";
@@ -59,6 +59,9 @@ const VocalRecordPage = () => {
   const [videoDescription, setVideoDescription] = useState("");
   const [isDescriptionLoading, setIsDescriptionLoading] = useState(true);
   const [isShow, setIsShow] = useState(false);
+
+  const [video, setVideo] = useState(null);
+  const recorderRef = useRef(null); // Recorder 컴포넌트 참조
 
   // 비디오 제목을 YouTube API로 가져오기
   useEffect(() => {
@@ -225,6 +228,17 @@ const VocalRecordPage = () => {
         <Title>🎤 나의 보컬 녹음</Title>
         <VideoIdText>🎬 Video ID: {videoId}</VideoIdText>
         <ContentWrapper>
+          <IframeWrapper>
+            <iframe
+              width="100%"
+              height="100%"
+              src={`https://www.youtube.com/embed/${videoId}?enablejsapi=1`}
+              title="YouTube video player"
+              frameBorder="0"
+              allowFullScreen
+            ></iframe>
+          </IframeWrapper>
+
           <RecordBox>
             <Recorder onRecordingComplete={setAudioBlob} />
 
@@ -243,7 +257,6 @@ const VocalRecordPage = () => {
             )}
             {audioUrl && <AudioPlayer key={audioUrl} controls src={audioUrl} />}
           </RecordBox>
-
           {/* 비디오 설명을 보여주는 부분 */}
           {isShow && (
             <DescriptionWrapper>
@@ -257,7 +270,6 @@ const VocalRecordPage = () => {
               )}
             </DescriptionWrapper>
           )}
-
           <ActionButton onClick={handleAnalyze}>🎧 분석하기</ActionButton>
         </ContentWrapper>
       </ListContainer>
@@ -286,7 +298,7 @@ const ListContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  // justify-content: center;
 
   &::-webkit-scrollbar {
     width: 5px;
@@ -379,4 +391,14 @@ const DescriptionWrapper = styled.div`
   padding: 1rem;
   background-color: #1e1e1e;
   border-radius: 10px;
+`;
+
+const IframeWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 0 12px rgba(155, 126, 216, 0.2);
+  margin-bottom: 1.5rem;
 `;
