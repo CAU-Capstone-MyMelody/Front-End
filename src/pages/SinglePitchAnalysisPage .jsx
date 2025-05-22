@@ -13,6 +13,7 @@ import {
 import TopNavBack from "../components/TopNavBack";
 import { fetchChatGptRecommendation } from "../apis/chatgpt";
 import resultJson from "../data/pitch_results.json"; // JSON 파일 경로에 맞게 수정
+import { Formatter, Renderer, Stave, StaveNote } from "vexflow";
 
 // 재생 위치 수직 선
 const verticalLinePlugin = {
@@ -61,6 +62,83 @@ Chart.register(
   verticalLinePlugin
 );
 
+// Hz → note name 변환 유틸
+function hzToNoteName(hz) {
+  const noteNames = [
+    "C",
+    "C#",
+    "D",
+    "D#",
+    "E",
+    "F",
+    "F#",
+    "G",
+    "G#",
+    "A",
+    "A#",
+    "B",
+  ];
+  const A4 = 440;
+  const semitoneOffset = Math.round(12 * Math.log2(hz / A4));
+  const midi = 69 + semitoneOffset;
+  const note = noteNames[midi % 12];
+  const octave = Math.floor(midi / 12) - 1;
+  return `${note}/${octave}`;
+}
+
+function hzToNoteName2(hz) {
+  const noteNames = [
+    "C",
+    "C#",
+    "D",
+    "D#",
+    "E",
+    "F",
+    "F#",
+    "G",
+    "G#",
+    "A",
+    "A#",
+    "B",
+  ];
+  const A4 = 440;
+  const semitoneOffset = Math.round(12 * Math.log2(hz / A4));
+  const midi = 69 + semitoneOffset;
+  const note = noteNames[midi % 12];
+  const octave = Math.floor(midi / 12) - 1;
+  return `${note}${octave}`;
+}
+
+// VexFlow 렌더링 함수
+function renderSingleNote(container, hz) {
+  if (!container) {
+    console.error("Container is not defined");
+    return;
+  }
+
+  container.innerHTML = "";
+
+  const renderer = new Renderer(container, Renderer.Backends.SVG);
+  renderer.resize(200, 180); // 한 악보당 크기 조절
+  const context = renderer.getContext();
+
+  const stave = new Stave(10, 40, 160); // 작게 줄임
+  stave.addClef("treble").setContext(context).draw();
+
+  const noteName = hzToNoteName(hz).replace("#", "#");
+  const [key, octave] = noteName.split("/");
+
+  console.log("key", key);
+  console.log("octave", octave);
+
+  const note = new StaveNote({
+    keys: [`${key}/${octave}`],
+    duration: "q",
+  });
+
+  Formatter.FormatAndDraw(context, stave, [note]);
+}
+
 const SinglePitchAnalysisPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -75,6 +153,12 @@ const SinglePitchAnalysisPage = () => {
   const { time, recordedPitch, note, audioBlob, selectedGenres, transpose } =
     location.state || {};
 
+  const vexMinRef = useRef(null);
+  const vexMaxRef = useRef(null);
+
+  const [maxNote, setMaxNote] = useState();
+  const [minNote, setMinNote] = useState();
+
   useEffect(() => {
     if (audioBlob) {
       // 녹음된 음성에 대한 오디오 파일의 url을 생성 (임시 url로 종료되면 사라진다)
@@ -86,6 +170,13 @@ const SinglePitchAnalysisPage = () => {
   }, [audioBlob]);
 
   useEffect(() => {
+    if (minNote || maxNote) {
+      console.log("최소 음정 (state 변경 후):", minNote);
+      console.log("최대 음정 (state 변경 후):", maxNote);
+    }
+  }, [minNote, maxNote]);
+
+  useEffect(() => {
     const interval = setInterval(() => {
       if (audioRef.current) {
         setCurrentTime(audioRef.current.currentTime);
@@ -93,6 +184,26 @@ const SinglePitchAnalysisPage = () => {
     }, 100);
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    if (recordedPitch && recordedPitch.length > 0) {
+      console.log("recordedPitch", recordedPitch);
+      const pitches = recordedPitch.filter((hz) => hz > 0);
+      const minHz = Math.min(...pitches);
+      const maxHz = Math.max(...pitches);
+      console.log("최소 음정:", minHz);
+      console.log("최대 음정:", typeof maxHz);
+      renderSingleNote(vexMinRef.current, minHz);
+      renderSingleNote(vexMaxRef.current, maxHz);
+
+      const minNoteTemp = hzToNoteName2(minHz);
+      const maxNoteTemp = hzToNoteName2(maxHz);
+      setMinNote(minNoteTemp);
+      setMaxNote(maxNoteTemp);
+      console.log("최소 음정:", minNote);
+      console.log("최대 음정:", maxNote);
+    }
+  }, [recordedPitch]);
 
   useEffect(() => {
     let timeoutId;
@@ -309,6 +420,19 @@ const SinglePitchAnalysisPage = () => {
           </AnalysisWrapper>
         )}
 
+        <ScoreWrapper>
+          <div>
+            <h4>🎵 최저 음정</h4>
+            <VexScore ref={vexMinRef} />
+            <p>{minNote}</p> {/* 여기서 최소 음정 텍스트 출력 */}
+          </div>
+          <div>
+            <h4>🎵 최고 음정</h4>
+            <VexScore ref={vexMaxRef} />
+            <p>{maxNote}</p> {/* 여기서 최대 음정 텍스트 출력 */}
+          </div>
+        </ScoreWrapper>
+
         {analysisResult && (
           <>
             <AnalysisWrapper>
@@ -404,6 +528,36 @@ const ChartWrapper = styled.div`
   position: relative;
   width: 100%;
   height: 300px;
+`;
+
+const ScoreWrapper = styled.div`
+  margin-top: 2rem;
+  color: #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 1rem;
+  flex-wrap: wrap;
+
+  div {
+    min-width: 180px;
+    border-radius: 10px;
+    padding: 1rem;
+    text-align: center;
+  }
+
+  p {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #9b7ed8;
+  }
+`;
+
+const VexScore = styled.div`
+  background-color: white;
+  margin-top: 1rem;
+  flex: 1 1 45%;
+  min-width: 180px;
 `;
 
 const AnalysisWrapper = styled.div`

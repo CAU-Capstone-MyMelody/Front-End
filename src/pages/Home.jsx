@@ -16,6 +16,17 @@ const Home = () => {
     <Container>
       <TopNav></TopNav>
       <ListContainer>
+        {/* <GoToBoxContainer>
+          <GoToBox>
+            <Title>음역대 분석</Title>
+            <Text>바로가기</Text>
+          </GoToBox>
+          <GoToBox>
+            <Title>Top100 Song</Title>
+            <Text>바로가기</Text>
+          </GoToBox>
+        </GoToBoxContainer> */}
+
         <MusicSection
           title="🇰🇷🎧 지금 한국에서 인기 있는 음악"
           regionCode="KR"
@@ -59,4 +70,36 @@ const ListContainer = styled.div`
   &::-webkit-scrollbar-track {
     background: rgba(150, 150, 150, 0.1);
   }
+`;
+
+const GoToBoxContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1rem 0;
+`;
+
+const GoToBox = styled.div`
+  width: 40%;
+  background-color: white;
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  color: black;
+  text-align: center;
+  cursor: pointer;
+  font-weight: bold;
+  border: 2px solid #e0e1e1;
+  box-sizing: border-box;
+`;
+
+const Title = styled.h2`
+  font-size: 1.2rem;
+  font-weight: bold;
+`;
+
+const Text = styled.div`
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 0.5rem;
 `;
