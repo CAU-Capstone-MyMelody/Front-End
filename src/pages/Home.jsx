@@ -4,9 +4,11 @@ import Nav from "../components/Nav";
 import TopNav from "../components/TopNav";
 import { useNavContext } from "../apis/NavContext";
 import MusicSection from "../components/MusicSection";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const { setActiveNav } = useNavContext();
+  const navigate = useNavigate();
 
   useEffect(() => {
     setActiveNav(0);
@@ -16,16 +18,16 @@ const Home = () => {
     <Container>
       <TopNav></TopNav>
       <ListContainer>
-        {/* <GoToBoxContainer>
-          <GoToBox>
-            <Title>음역대 분석</Title>
+        <GoToBoxContainer>
+          <GoToBox onClick={() => navigate("/coach")}>
+            <Title>노래 코칭</Title>
             <Text>바로가기</Text>
           </GoToBox>
           <GoToBox>
             <Title>Top100 Song</Title>
             <Text>바로가기</Text>
           </GoToBox>
-        </GoToBoxContainer> */}
+        </GoToBoxContainer>
 
         <MusicSection
           title="🇰🇷🎧 지금 한국에서 인기 있는 음악"

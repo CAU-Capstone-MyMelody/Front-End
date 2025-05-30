@@ -346,17 +346,54 @@ const SinglePitchAnalysisPage = () => {
     // Blob을 Base64로 변환해서 저장
     // url로 하는것은 임시이고 Base64로 해당 오디오를 영구 저장할수 있게 한다.
     // 로컬스토리지에 있던 기존의 데이터를 가져와서 그것(prev)에 이어서 다시 setItem한다
+    // const reader = new FileReader();
+    // reader.onloadend = () => {
+    //   newEntry.audioBase64 = reader.result; // Base64 데이터 추가
+    //   const prev = JSON.parse(localStorage.getItem("voiceAnalysis")) || [];
+    //   localStorage.setItem(
+    //     "voiceAnalysis",
+    //     JSON.stringify([...prev, newEntry])
+    //   );
+    //   setIsModalOpen(false);
+    //   setCustomTitle("");
+    //   alert("분석 결과가 저장되었습니다!");
+    // };
+
     const reader = new FileReader();
     reader.onloadend = () => {
-      newEntry.audioBase64 = reader.result; // Base64 데이터 추가
-      const prev = JSON.parse(localStorage.getItem("voiceAnalysis")) || [];
-      localStorage.setItem(
-        "voiceAnalysis",
-        JSON.stringify([...prev, newEntry])
-      );
-      setIsModalOpen(false);
-      setCustomTitle("");
-      alert("분석 결과가 저장되었습니다!");
+      newEntry.audioBase64 = reader.result; // Base64 데이터 포함
+
+      let prev = JSON.parse(localStorage.getItem("voiceAnalysis")) || [];
+
+      // 새 항목 추가 후 localStorage 크기를 테스트
+      prev.push(newEntry);
+
+      try {
+        localStorage.setItem("voiceAnalysis", JSON.stringify(prev));
+        setIsModalOpen(false);
+        setCustomTitle("");
+        alert("분석 결과가 저장되었습니다!");
+      } catch (e) {
+        // 용량 초과 발생 시 오래된 항목 제거하며 재시도
+        while (e.name === "QuotaExceededError" && prev.length > 0) {
+          prev.shift(); // 가장 오래된 항목 제거
+          try {
+            localStorage.setItem("voiceAnalysis", JSON.stringify(prev));
+            setIsModalOpen(false);
+            setCustomTitle("");
+            alert("이전 기록 일부를 제거하고 새 결과를 저장했습니다.");
+            break;
+          } catch (err) {
+            e = err; // 다시 오류 발생 시 루프 유지
+          }
+        }
+
+        if (prev.length === 0) {
+          alert(
+            "저장 공간이 부족해 저장할 수 없습니다. 다른 항목을 삭제해주세요."
+          );
+        }
+      }
     };
 
     reader.readAsDataURL(audioBlob);
@@ -527,7 +564,7 @@ const AudioPlayer = styled.audio`
 const ChartWrapper = styled.div`
   position: relative;
   width: 100%;
-  height: 300px;
+  // height: 300px;
 `;
 
 const ScoreWrapper = styled.div`

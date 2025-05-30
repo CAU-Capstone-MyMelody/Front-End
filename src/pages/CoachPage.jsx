@@ -1,66 +1,67 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import Nav from "../components/Nav";
 import TopNav from "../components/TopNav";
-import axios from "axios";
+import Nav from "../components/Nav";
 import { useNavigate } from "react-router-dom";
 
-const Chart = () => {
+const chartData = [
+  {
+    rank: 1,
+    title: "벚꽃엔딩",
+    artist: "버스커 버스커",
+    image: "/img/벚꽃엔딩.png",
+    videoId: "uEsT7K_X7Pw",
+  },
+  {
+    rank: 2,
+    title: "Butter",
+    artist: "BTS",
+    image: "/img/BTS_Butter.png",
+    videoId: "h-XrgiZiQgw",
+  },
+  {
+    rank: 3,
+    title: "Attention",
+    artist: "Charlie Puth",
+    image: "/img/CharliePuth_Attention.png",
+    videoId: "SsWEqDt3LXk",
+  },
+];
+
+const CoachPage = () => {
   const navigate = useNavigate();
-
-  const [chartData, setChartData] = useState([]);
-
-  useEffect(() => {
-    const fetchChartData = async () => {
-      try {
-        const response = await axios.get(
-          "http://3.39.217.34:8000/melon-chart",
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-
-        const data = response.data;
-        console.log(data);
-        setChartData(response.data);
-      } catch (error) {
-        console.error("차트 불러오기 실패:", error);
-      }
-    };
-
-    fetchChartData();
-  }, [navigate]);
 
   return (
     <Container>
-      <TopNav />
+      <TopNav></TopNav>
       <ListContainer>
-        <h2>🎧 Top 100 Songs</h2>
+        <h2>🎧 노래 목록</h2>
         {chartData.map((song, index) => (
-          <SongCard key={index}>
+          <SongCard
+            key={index}
+            onClick={() => navigate(`/coachrecord?videoId=${song.videoId}`)}
+          >
             <Rank>{song.rank}</Rank>
             <AlbumImg src={song.image} alt={`${song.title} 앨범 이미지`} />
             <Info>
               <Title>{song.title}</Title>
               <Artist>{song.artist}</Artist>
             </Info>
-            {song.isNew && <NewBadge>NEW</NewBadge>}
           </SongCard>
         ))}
       </ListContainer>
-      <Nav />
+      <Nav></Nav>
     </Container>
   );
 };
 
-export default Chart;
+export default CoachPage;
 
 const Container = styled.div`
   background-color: #090909;
   width: 100%;
   height: 100%;
+  // position: relative;
 `;
 
 const ListContainer = styled.div`
@@ -87,7 +88,7 @@ const ListContainer = styled.div`
   }
 
   h2 {
-    color: #dfe2ea;
+    color: white;
   }
 `;
 
@@ -99,6 +100,8 @@ const SongCard = styled.div`
   padding: 0.75rem;
   margin-bottom: 0.75rem;
   position: relative;
+
+  cursor: pointer;
 `;
 
 const Rank = styled.div`
@@ -130,16 +133,4 @@ const Title = styled.div`
 const Artist = styled.div`
   font-size: 0.875rem;
   color: #aaa;
-`;
-
-const NewBadge = styled.div`
-  position: absolute;
-  right: 12px;
-  top: 12px;
-  background-color: #9b7ed8;
-  color: black;
-  font-size: 0.7rem;
-  font-weight: bold;
-  padding: 2px 6px;
-  border-radius: 6px;
 `;

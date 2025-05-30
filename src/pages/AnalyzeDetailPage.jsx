@@ -190,6 +190,7 @@ const AnalyzeDetailPage = () => {
       {
         label: "🎙️ 녹음 음정",
         data: pitchData,
+        stepped: true,
         borderColor: "#9b7ed8",
         backgroundColor: "#9b7ed8",
         tension: 0.3,

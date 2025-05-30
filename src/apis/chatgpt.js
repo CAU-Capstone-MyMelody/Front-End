@@ -93,3 +93,73 @@ ${formattedSongs}
     throw new Error("ChatGPT 분석 요청 중 오류가 발생했습니다.");
   }
 };
+
+// 음정 분석 결과를 ChatGPT로부터 피드백 받기
+
+export const fetchPitchFeedbackFromChatGpt = async (
+  recordedPitch,
+  originalPitch,
+  time
+) => {
+  const prompt = `
+너는 초보자를 위한 친절한 보컬 트레이너야.
+
+아래의 사용자 음정 데이터와 원곡 데이터를 비교 분석해서,
+1. 사용자의 발성, 음정 안정성, 벗어난 구간 등에 대해 구체적인 분석을 해줘.
+2. 초보자도 이해하기 쉽게 설명해줘.
+3. 총평이 너무 길지 않게 단락을 나눠서 전달해줘.
+
+그리고 다음과 같은 **JSON 형식으로만** 응답해줘:
+
+{
+  "analysis": [
+    "문장1 또는 단락1",
+    "문장2 또는 단락2",
+    "문장3 또는 단락3"
+  ],
+  "importantFeedback": [
+    "가장 중요한 피드백 1줄",
+    "보완이 시급한 포인트 요약 1줄"
+  ]
+}
+
+다음은 비교할 데이터야:
+
+- 시간 정보: ${JSON.stringify(time)}
+- 사용자 음정: ${JSON.stringify(recordedPitch)}
+- 원곡 음정: ${JSON.stringify(originalPitch)}
+`;
+
+  try {
+    const response = await axios.post(
+      "https://api.openai.com/v1/chat/completions",
+      {
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: prompt }],
+        temperature: 0.7,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${OPENAI_API_KEY}`,
+        },
+      }
+    );
+
+    const content = response.data.choices[0].message.content;
+
+    try {
+      const result = JSON.parse(content);
+      return {
+        analysis: result.analysis,
+        importantFeedback: result.importantFeedback,
+      };
+    } catch (parseError) {
+      console.error("응답 파싱 실패:", parseError);
+      throw new Error("ChatGPT 응답이 올바른 JSON 형식이 아닙니다.");
+    }
+  } catch (error) {
+    console.error("ChatGPT 요청 실패:", error.response?.data || error.message);
+    throw new Error("ChatGPT 분석 요청 중 오류가 발생했습니다.");
+  }
+};

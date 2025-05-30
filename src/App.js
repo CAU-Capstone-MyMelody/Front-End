@@ -20,6 +20,9 @@ import AnalyzeDetailPage from "./pages/AnalyzeDetailPage";
 import GuideLinePage from "./pages/GuideLinePage";
 import MergeKaraokePage from "./pages/MergeKaraokePage";
 import PitchAnalysisPageSheet from "./pages/PitchAnalysisPageSheet";
+import CoachPage from "./pages/CoachPage";
+import CoachRecordPage from "./pages/CoachRecordPage";
+import CoachPitchAnalysisPage from "./pages/CoachPitchAnalysisPage";
 
 function App() {
   return (
@@ -27,6 +30,12 @@ function App() {
       <AppDom>
         <Routes>
           <Route path="/" element={<Home></Home>}></Route>
+          <Route path="/coach" element={<CoachPage></CoachPage>}></Route>
+          <Route path="/coachrecord" element={<CoachRecordPage />} />
+          <Route
+            path="/coachpitchanalysis"
+            element={<CoachPitchAnalysisPage />}
+          />
           <Route path="/analyze" element={<Analyze></Analyze>}></Route>
           <Route
             path="/guideline"
