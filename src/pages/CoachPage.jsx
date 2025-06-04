@@ -14,17 +14,17 @@ const chartData = [
   },
   {
     rank: 2,
-    title: "Butter",
-    artist: "BTS",
-    image: "/img/BTS_Butter.png",
-    videoId: "h-XrgiZiQgw",
+    title: "헤어지자 말해요",
+    artist: "박재정",
+    image: "/img/헤어지자말해요.png",
+    videoId: "SrQzxD8UFdM",
   },
   {
     rank: 3,
-    title: "Attention",
-    artist: "Charlie Puth",
-    image: "/img/CharliePuth_Attention.png",
-    videoId: "SsWEqDt3LXk",
+    title: "아무노래",
+    artist: "지코 (ZICO)",
+    image: "/img/아무노래.png",
+    videoId: "yL6P7OR5WOM",
   },
 ];
 
