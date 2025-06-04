@@ -255,36 +255,6 @@ const CoachRecordPage = () => {
 
     setIsShow(true);
 
-    try {
-      const formData = new FormData();
-      formData.append("file", audioBlob, audioBlob.name); // 파일 이름 설정
-      formData.append(
-        "youtube_url",
-        `https://www.youtube.com/watch?v=${videoId}`
-      );
-      formData.append("start_time", startTime); // 시작 시간 추가
-      formData.append("end_time", endTime); // 끝 시간 추가
-
-      console.log(formData.get("file"));
-
-      const { time, recordedPitch, originalPitch } = dummyAnalysisResult2;
-
-      console.log(dummyAnalysisResult2);
-
-      navigate("/coachpitchanalysis", {
-        state: {
-          time,
-          recordedPitch,
-          originalPitch,
-          audioBlob,
-          videoId,
-        },
-      });
-    } catch (error) {
-      console.error("분석 중 오류 발생:", error);
-      alert("분석 중 오류가 발생했습니다.");
-    }
-
     // try {
     //   const formData = new FormData();
     //   formData.append("file", audioBlob, audioBlob.name); // 파일 이름 설정
@@ -297,19 +267,9 @@ const CoachRecordPage = () => {
 
     //   console.log(formData.get("file"));
 
-    //   const response = await axios.post(
-    //     "http://3.39.217.34:8000/analyze_dtw",
-    //     formData,
-    //     {
-    //       headers: {
-    //         "Content-Type": "multipart/form-data",
-    //       },
-    //     }
-    //   );
+    //   const { time, recordedPitch, originalPitch } = dummyAnalysisResult2;
 
-    //   const { time, recordedPitch, originalPitch } = response.data;
-
-    //   console.log(response.data);
+    //   console.log(dummyAnalysisResult2);
 
     //   navigate("/coachpitchanalysis", {
     //     state: {
@@ -324,6 +284,60 @@ const CoachRecordPage = () => {
     //   console.error("분석 중 오류 발생:", error);
     //   alert("분석 중 오류가 발생했습니다.");
     // }
+
+    try {
+      const formData = new FormData();
+      formData.append("file", audioBlob, audioBlob.name); // 파일 이름 설정
+      formData.append(
+        "youtube_url",
+        `https://www.youtube.com/watch?v=${videoId}`
+      );
+      formData.append("start_time", startTime); // 시작 시간 추가
+      formData.append("end_time", endTime); // 끝 시간 추가
+
+      console.log(formData.get("file"));
+
+      let analyzeUrl;
+      if (videoId === "uEsT7K_X7Pw") {
+        console.log("벚꽃엔딩");
+        analyzeUrl = "analyze";
+      } else if (videoId === "SrQzxD8UFdM") {
+        console.log("헤어지자 말해요요");
+        analyzeUrl = "analyze2";
+      } else if (videoId === "yL6P7OR5WOM") {
+        console.log("아무노래");
+        analyzeUrl = "analyze3";
+      }
+
+      console.log("분석 URL:", analyzeUrl);
+
+      const response = await axios.post(
+        `http://localhost:8000/${analyzeUrl}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      const { time, recordedPitch, originalPitch } = response.data;
+
+      console.log(response.data);
+
+      navigate("/coachpitchanalysis", {
+        state: {
+          time,
+          recordedPitch,
+          originalPitch,
+          audioBlob,
+          videoId,
+        },
+      });
+    } catch (error) {
+      console.error("분석 중 오류 발생:", error);
+      alert("분석 중 오류가 발생했습니다.");
+    }
   };
 
   // 시작 시간 변경 핸들러

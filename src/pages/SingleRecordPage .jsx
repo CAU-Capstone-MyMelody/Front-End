@@ -87,8 +87,9 @@ const SingleRecordPage = () => {
       formData.append("file", audioBlob, audioBlob.name);
 
       console.log(formData.get("file"));
+
       const response = await axios.post(
-        "http://3.39.217.34:8000/analyze",
+        "http://localhost:8000/analyze0",
         formData,
         {
           headers: {
