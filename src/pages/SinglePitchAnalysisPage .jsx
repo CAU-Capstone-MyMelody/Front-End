@@ -292,40 +292,6 @@ const SinglePitchAnalysisPage = () => {
     setIsModalOpen(true);
   };
 
-  // 백엔드가 있다면 연결될 함수
-  // const handleConfirmSave = () => {
-  //   if (!customTitle.trim()) {
-  //     alert("타이틀을 입력해주세요!");
-  //     return;
-  //   }
-
-  //   const reader = new FileReader();
-  //   reader.onloadend = async () => {
-  //     const audioBase64 = reader.result;
-
-  //     const myVoiceData = {
-  //       title: customTitle,
-  //       resultSummary: analysisResult,
-  //       recordedPitch,
-  //       time,
-  //       audioBase64,
-  //       createdAt: new Date().toISOString(),
-  //     };
-
-  //     try {
-  //       await saveMyVoiceAnalysisResult(myVoiceData);
-  //       setIsModalOpen(false);
-  //       setCustomTitle("");
-  //       alert("분석 결과가 저장되었습니다!");
-  //     } catch (error) {
-  //       console.error("저장 실패: ", error);
-  //       alert("저장 중 오류가 발생했습니다.");
-  //     }
-  //   };
-
-  //   reader.readAsDataURL(audioBlob);
-  // };
-
   const handleConfirmSave = () => {
     if (!customTitle.trim()) {
       alert("타이틀을 입력해주세요!");
@@ -342,22 +308,6 @@ const SinglePitchAnalysisPage = () => {
       time,
       audioUrl, // 저장할 수는 없고, blob을 base64로 변환해서 저장해야 함
     };
-
-    // Blob을 Base64로 변환해서 저장
-    // url로 하는것은 임시이고 Base64로 해당 오디오를 영구 저장할수 있게 한다.
-    // 로컬스토리지에 있던 기존의 데이터를 가져와서 그것(prev)에 이어서 다시 setItem한다
-    // const reader = new FileReader();
-    // reader.onloadend = () => {
-    //   newEntry.audioBase64 = reader.result; // Base64 데이터 추가
-    //   const prev = JSON.parse(localStorage.getItem("voiceAnalysis")) || [];
-    //   localStorage.setItem(
-    //     "voiceAnalysis",
-    //     JSON.stringify([...prev, newEntry])
-    //   );
-    //   setIsModalOpen(false);
-    //   setCustomTitle("");
-    //   alert("분석 결과가 저장되었습니다!");
-    // };
 
     const reader = new FileReader();
     reader.onloadend = () => {
@@ -484,9 +434,23 @@ const SinglePitchAnalysisPage = () => {
             <SectionTitle>🎧 추천 노래</SectionTitle>
             <RecommendationList>
               {recommendations.map((song, index) => (
-                <li key={index}>
-                  • <strong>{song.title}</strong>{" "}
-                  <span style={{ color: "#aaa" }}>- {song.artist}</span>
+                <li key={index} style={{ marginBottom: "1rem" }}>
+                  <div style={{ fontSize: "1rem" }}>
+                    • <strong>{song.title}</strong>{" "}
+                    <span style={{ color: "#aaa" }}>- {song.artist}</span>
+                  </div>
+                  <div
+                    style={{
+                      color: "#dfdfdf",
+                      fontSize: "0.9rem",
+                      marginLeft: "1.5rem",
+                    }}
+                  >
+                    최고음: <strong>{hzToNoteName2(song.max)}</strong> (
+                    {song.max}
+                    Hz) / 최저음: <strong>{hzToNoteName2(song.min)}</strong> (
+                    {song.min}Hz)
+                  </div>
                 </li>
               ))}
             </RecommendationList>

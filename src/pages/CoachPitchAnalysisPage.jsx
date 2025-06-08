@@ -137,13 +137,17 @@ const CoachPitchAnalysisPage = () => {
   // 4개씩 그룹으로 나누기
   const chunkedOriginal = [];
   const chunkedRecorded = [];
-  for (let i = 0; i < originalPitch.length; i += 4) {
-    chunkedOriginal.push(originalPitch.slice(i, i + 4));
-    chunkedRecorded.push(recordedPitch.slice(i, i + 4));
+  // for (let i = 0; i < originalPitch.length; i += 4) {
+  //   chunkedOriginal.push(originalPitch.slice(i, i + 4));
+  //   chunkedRecorded.push(recordedPitch.slice(i, i + 4));
+  // }
+
+  for (let i = 0; i < originalPitch.length; i += 8) {
+    chunkedOriginal.push(originalPitch.slice(i, i + 8));
+    chunkedRecorded.push(recordedPitch.slice(i, i + 8));
   }
 
   const refs = useRef([]);
-
   useEffect(() => {
     const index = currentIndex;
     const ref = refs.current[index];
@@ -151,48 +155,61 @@ const CoachPitchAnalysisPage = () => {
 
     ref.innerHTML = "";
     const renderer = new Renderer(ref, Renderer.Backends.SVG);
-    renderer.resize(400, 200);
+    renderer.resize(400, 350); // 높이 증가
     const context = renderer.getContext();
-    const stave = new Stave(10, 40, 380);
-    stave.addClef("treble").setContext(context).draw();
+
+    const drawLine = (startY, oSlice, rSlice) => {
+      const stave = new Stave(10, startY, 380);
+      stave.addClef("treble").setContext(context).draw();
+
+      const padWithRest = (arr) => {
+        const result = [...arr];
+        while (result.length < 4) result.push(null);
+        return result;
+      };
+
+      const paddedOriginal = padWithRest(oSlice);
+      const paddedRecorded = padWithRest(rSlice);
+
+      const originalNotes = paddedOriginal.map((hz) =>
+        hz
+          ? new StaveNote({ keys: [`${hzToNoteName(hz)}/4`], duration: "q" })
+          : new StaveNote({ keys: ["b/4"], duration: "qr" })
+      );
+
+      const recordedNotes = paddedRecorded.map((hz) =>
+        hz
+          ? new StaveNote({ keys: [`${hzToNoteName(hz)}/4`], duration: "q" })
+          : new StaveNote({ keys: ["b/5"], duration: "qr" })
+      );
+
+      recordedNotes.forEach((note) => {
+        note.setStyle({ fillStyle: "#9B7ED8", strokeStyle: "#9B7ED8" });
+      });
+
+      const voice1 = new Voice({ num_beats: 4, beat_value: 4 });
+      voice1.addTickables(originalNotes);
+      const voice2 = new Voice({ num_beats: 4, beat_value: 4 });
+      voice2.addTickables(recordedNotes);
+
+      new Formatter()
+        .joinVoices([voice1, voice2])
+        .format([voice1, voice2], 350);
+      voice1.draw(context, stave);
+      voice2.draw(context, stave);
+    };
 
     const oSlice = chunkedOriginal[index];
     const rSlice = chunkedRecorded[index];
-    if (oSlice.length < 1 || rSlice.length < 1) return;
+    if (!oSlice.length || !rSlice.length) return;
 
-    const padWithRest = (arr) => {
-      const result = [...arr];
-      while (result.length < 4) result.push(null);
-      return result;
-    };
+    const firstHalfO = oSlice.slice(0, 4);
+    const secondHalfO = oSlice.slice(4, 8);
+    const firstHalfR = rSlice.slice(0, 4);
+    const secondHalfR = rSlice.slice(4, 8);
 
-    const paddedOriginal = padWithRest(oSlice);
-    const paddedRecorded = padWithRest(rSlice);
-
-    const originalNotes = paddedOriginal.map((hz) =>
-      hz
-        ? new StaveNote({ keys: [`${hzToNoteName(hz)}/4`], duration: "q" })
-        : new StaveNote({ keys: ["b/4"], duration: "qr" })
-    );
-
-    const recordedNotes = paddedRecorded.map((hz) =>
-      hz
-        ? new StaveNote({ keys: [`${hzToNoteName(hz)}/4`], duration: "q" })
-        : new StaveNote({ keys: ["b/5"], duration: "qr" })
-    );
-
-    recordedNotes.forEach((note) => {
-      note.setStyle({ fillStyle: "#9B7ED8", strokeStyle: "#9B7ED8" });
-    });
-
-    const voice1 = new Voice({ num_beats: 4, beat_value: 4 });
-    voice1.addTickables(originalNotes);
-    const voice2 = new Voice({ num_beats: 4, beat_value: 4 });
-    voice2.addTickables(recordedNotes);
-
-    new Formatter().joinVoices([voice1, voice2]).format([voice1, voice2], 350);
-    voice1.draw(context, stave);
-    voice2.draw(context, stave);
+    drawLine(40, firstHalfO, firstHalfR); // 첫 번째 줄
+    drawLine(180, secondHalfO, secondHalfR); // 두 번째 줄 (Y 위치 조정)
   }, [currentIndex, chunkedOriginal, chunkedRecorded]);
 
   // 오디오 Blob → URL 생성

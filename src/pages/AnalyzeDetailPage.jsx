@@ -252,12 +252,34 @@ const AnalyzeDetailPage = () => {
           <p>{entry.resultSummary}</p>
         </AnalysisWrapper>
         <Section>
-          <SectionTitle>🎧 추천 노래</SectionTitle>
+          {/* <SectionTitle>🎧 추천 노래</SectionTitle>
           <RecommendationList>
             {entry.recommendations.map((song, index) => (
               <li key={index} onClick={() => handleTagClick(song.title)}>
                 • <strong>{song.title}</strong>{" "}
                 <span style={{ color: "#aaa" }}>- {song.artist}</span>
+              </li>
+            ))}
+          </RecommendationList> */}
+          <SectionTitle>🎧 추천 노래</SectionTitle>
+          <RecommendationList>
+            {entry.recommendations.map((song, index) => (
+              <li key={index} style={{ marginBottom: "1rem" }}>
+                <div style={{ fontSize: "1rem" }}>
+                  • <strong>{song.title}</strong>{" "}
+                  <span style={{ color: "#aaa" }}>- {song.artist}</span>
+                </div>
+                <div
+                  style={{
+                    color: "#dfdfdf",
+                    fontSize: "0.9rem",
+                    marginLeft: "1.5rem",
+                  }}
+                >
+                  최고음: <strong>{hzToNoteName2(song.max)}</strong> ({song.max}
+                  Hz) / 최저음: <strong>{hzToNoteName2(song.min)}</strong> (
+                  {song.min}Hz)
+                </div>
               </li>
             ))}
           </RecommendationList>
