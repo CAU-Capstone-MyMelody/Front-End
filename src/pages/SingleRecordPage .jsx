@@ -172,25 +172,38 @@ const SingleRecordPage = () => {
         </Section>
         <ContentWrapper>
           <RecordBox>
-            <Recorder
-              onRecordingComplete={(blob) => {
-                setAudioBlob(blob);
-                setIsRecorded(true);
-                setAudioFileName(""); // 녹음 시 기존 업로드 파일명 초기화
-              }}
-            />
-            <UploadLabel htmlFor="audio-upload">
-              ▶️ 버튼을 통해 녹음 또는 오디오 파일 업로드
-            </UploadLabel>
-            <FileInput
-              id="audio-upload"
-              type="file"
-              accept="audio/*"
-              onChange={handleFileUpload}
-            />
+            <NoticeText>
+              🎤 직접 녹음하거나 📂 오디오 파일을 업로드해 주세요.
+            </NoticeText>
+            <RecorderWrapper>
+              <Recorder
+                onRecordingComplete={(blob) => {
+                  setAudioBlob(blob);
+                  setIsRecorded(true);
+                  setAudioFileName(""); // 녹음 시 기존 업로드 파일명 초기화
+                }}
+              />
+              <RecorderLabel>🎙️ 녹음 시작 / 중지</RecorderLabel>
+            </RecorderWrapper>
+
+            <Divider />
+
+            <UploadWrapper>
+              <UploadLabel htmlFor="audio-upload">
+                📂 오디오 파일 업로드
+              </UploadLabel>
+              <FileInput
+                id="audio-upload"
+                type="file"
+                accept="audio/*"
+                onChange={handleFileUpload}
+              />
+            </UploadWrapper>
+
             {audioFileName && !isRecorded && (
               <FileName>📁 {audioFileName}</FileName>
             )}
+
             {audioUrl && <AudioPlayer key={audioUrl} controls src={audioUrl} />}
           </RecordBox>
           <ActionButton onClick={handleAnalyze}>🎧 분석하기</ActionButton>
@@ -296,11 +309,11 @@ const TipNotice = styled.p`
   margin-top: 0.5rem;
 `;
 
-const RecordBox = styled.div`
-  padding: 1rem;
-  border-radius: 12px;
-  margin-bottom: 1.5rem;
-`;
+// const RecordBox = styled.div`
+//   padding: 1rem;
+//   border-radius: 12px;
+//   margin-bottom: 1.5rem;
+// `;
 
 const ActionButton = styled.button`
   background-color: #9b7ed8;
@@ -313,10 +326,89 @@ const ActionButton = styled.button`
   cursor: pointer;
 `;
 
-const AudioPlayer = styled.audio`
-  margin-top: 1rem;
-  width: 100%;
-  height: 42px;
+// const AudioPlayer = styled.audio`
+//   margin-top: 1rem;
+//   width: 100%;
+//   height: 42px;
+// `;
+
+// const UploadLabel = styled.label`
+//   display: inline-block;
+//   background-color: #1e1e1e;
+//   color: #9b7ed8;
+//   padding: 0.6rem 1.2rem;
+//   border-radius: 8px;
+//   font-size: 0.9rem;
+//   font-weight: 500;
+//   cursor: pointer;
+//   margin-top: 1rem;
+//   border: 1px solid #9b7ed8;
+//   transition: background-color 0.2s;
+
+//   &:hover {
+//     background-color: #2a2a2a;
+//   }
+// `;
+
+// const FileInput = styled.input`
+//   display: none;
+// `;
+
+// const FileName = styled.div`
+//   font-size: 0.85rem;
+//   color: #aaa;
+//   margin-top: 0.5rem;
+//   text-align: center;
+// `;
+
+// 새로운 RecorerWrapper 컴포넌트
+
+const RecordBox = styled.div`
+  padding: 1.5rem 2rem;
+  border-radius: 16px;
+  margin: 3rem 0;
+  background: #1e1e1e;
+  box-shadow: 0 0px 12px rgba(155, 126, 216, 0.5);
+  color: white;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const NoticeText = styled.p`
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ddd;
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  text-align: center;
+  user-select: none;
+  font-weight: 500;
+`;
+
+const RecorderWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const RecorderLabel = styled.span`
+  margin-top: 0.6rem;
+  font-size: 0.9rem;
+  color: #f0eaff;
+`;
+
+const UploadWrapper = styled.div`
+  margin-top: 1.5rem;
+`;
+
+const Divider = styled.hr`
+  width: 80%;
+  margin: 1.5rem auto 0 auto;
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
 `;
 
 const UploadLabel = styled.label`
@@ -325,10 +417,9 @@ const UploadLabel = styled.label`
   color: #9b7ed8;
   padding: 0.6rem 1.2rem;
   border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 500;
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
-  margin-top: 1rem;
   border: 1px solid #9b7ed8;
   transition: background-color 0.2s;
 
@@ -342,8 +433,14 @@ const FileInput = styled.input`
 `;
 
 const FileName = styled.div`
-  font-size: 0.85rem;
-  color: #aaa;
+  font-size: 0.9rem;
+  color: #ddd;
   margin-top: 0.5rem;
   text-align: center;
+`;
+
+const AudioPlayer = styled.audio`
+  margin-top: 1rem;
+  width: 100%;
+  height: 42px;
 `;
