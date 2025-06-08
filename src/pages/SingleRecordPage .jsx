@@ -154,6 +154,22 @@ const SingleRecordPage = () => {
       <TopNavBack />
       <ListContainer>
         <Title>🎤 나의 음역대 녹음</Title>
+        <Title>음역대 가이드 라인 음정</Title>
+        <audio controls src="record/test.mp3" />
+        <GuideImg src="/img/guideline.png" alt="" />
+        <Section>
+          <h2>음역대 테스트</h2>
+          <p>가장 낮은 음정부터 발음을 하며 점점 음을 내립니다.</p>
+          <p>
+            위의 사진은 예시일뿐 사진의 계이름 음정과 맞추실 필요는 없습니다.
+          </p>
+          <p>음이 끊기지 계속 이어져 가야됩니다.</p>
+          <p>마지막 최고음을 2초 유지한 뒤 녹음을 종료해주세요</p>
+          <TipNotice>
+            최대 <span>30초</span> 내외로 녹음을 해주세요
+          </TipNotice>
+          <Tip>💡노래의 한 소절을 불러서 제공해주셔도 됩니다</Tip>{" "}
+        </Section>
         <ContentWrapper>
           <RecordBox>
             <Recorder
@@ -163,9 +179,8 @@ const SingleRecordPage = () => {
                 setAudioFileName(""); // 녹음 시 기존 업로드 파일명 초기화
               }}
             />
-            {/* 🔽 오디오 파일 업로드 UI */}
             <UploadLabel htmlFor="audio-upload">
-              또는 오디오 파일 업로드
+              ▶️ 버튼을 통해 녹음 또는 오디오 파일 업로드
             </UploadLabel>
             <FileInput
               id="audio-upload"
@@ -206,7 +221,25 @@ const ListContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+
+  box-sizing: border-box;
+
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(150, 150, 150);
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(150, 150, 150, 0.1);
+  }
+
+  audio {
+    width: 100%;
+  }
 `;
 
 const ContentWrapper = styled.div`
@@ -221,6 +254,46 @@ const Title = styled.h2`
   font-weight: bold;
   color: white;
   margin: 0.5rem 0 1rem 0;
+`;
+
+const GuideImg = styled.img`
+  width: 80%;
+  border-radius: 16px;
+  margin: 1rem auto;
+  display: block;
+`;
+
+const Section = styled.div`
+  background-color: #1c1c1e;
+  border-radius: 16px;
+  padding: 1.2rem;
+  margin-bottom: 1.5rem;
+  color: #e2e2e2;
+
+  h2 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 0;
+  }
+
+  p {
+    margin-bottom: 0.4rem;
+    font-size: 0.95rem;
+  }
+`;
+
+const Tip = styled.p`
+  font-size: 0.9rem;
+  color: #9b7ed8;
+  margin-top: 0.5rem;
+`;
+
+const TipNotice = styled.p`
+  span {
+    color: red;
+    font-weight: bold;
+  }
+  margin-top: 0.5rem;
 `;
 
 const RecordBox = styled.div`

@@ -17,11 +17,11 @@ const GuideLinePage = () => {
         <GuideImg src="/img/guideline.png" alt="" />
         <Section>
           <h2>음역대 테스트</h2>
-          <p>가장 낮은 음정부터 발음을 하며 점점 음을 내내립니다.</p>
+          <p>가장 낮은 음정부터 발음을 하며 점점 음을 내립니다.</p>
           <p>
             위의 사진은 예시일뿐 사진의 계이름 음정과 맞추실 필요는 없습니다.
           </p>
-          <p>음이 끊기지 계속 이어져가야됩니다.</p>
+          <p>음이 끊기지 계속 이어져 가야됩니다.</p>
           <p>마지막 최고음을 2초 유지한 뒤 녹음을 종료해주세요</p>
           <TipNotice>
             최대 <span>30초</span> 내외로 녹음을 해주세요
@@ -90,6 +90,7 @@ const GuideImg = styled.img`
   margin: 1rem auto;
   display: block;
 `;
+
 const Section = styled.div`
   background-color: #1c1c1e;
   border-radius: 16px;

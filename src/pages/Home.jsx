@@ -20,15 +20,25 @@ const Home = () => {
       <ListContainer>
         <GoToBoxContainer>
           <GoToBox onClick={() => navigate("/coach")}>
-            <Title>노래 코칭</Title>
+            <Title>🎤노래 코칭</Title>
             <Text>바로가기</Text>
-          </GoToBox>
-          <GoToBox>
-            <Title>Top100 Song</Title>
-            <Text>바로가기</Text>
+            <Description>
+              마이멜로디에서 제공하는 간단한 노래 코칭 서비스입니다.
+              <br /> 원하는 파트를 골라 짧게 따라 부르면, 음정 분석을 통해
+              간단한 피드백을 받을 수 있습니다.
+              <br />
+              제공되는 노래는 점진적으로 업데이트될 예정입니다.
+              <br /> <br />
+              <strong>
+                <span>
+                  실시간 녹음 혹은 미리 준비된 음성 파일을 업로드하고 해당
+                  녹음된 파트의 원곡 시간대를 작성해주세요
+                </span>
+              </strong>
+            </Description>
           </GoToBox>
         </GoToBoxContainer>
-
+        {/* <h2>국가별 인기 차트</h2> */}
         <MusicSection
           title="🇰🇷🎧 지금 한국에서 인기 있는 음악"
           regionCode="KR"
@@ -76,32 +86,55 @@ const ListContainer = styled.div`
 
 const GoToBoxContainer = styled.div`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 1rem 0;
+  justify-content: center;
+  margin: 1.5rem 0;
 `;
 
 const GoToBox = styled.div`
-  width: 40%;
-  background-color: white;
-  border-radius: 10px;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  color: black;
-  text-align: center;
+  width: 100%;
+  max-width: 600px;
+  background-color: #1e1e1e; /* 어두운 배경 */
+  border-radius: 16px;
+  padding: 1.5rem;
+  color: #ffffff;
+  position: relative;
   cursor: pointer;
-  font-weight: bold;
-  border: 2px solid #e0e1e1;
+  border: 1px solid #333;
   box-sizing: border-box;
+  transition: background-color 0.2s;
 `;
 
-const Title = styled.h2`
-  font-size: 1.2rem;
+const Title = styled.h1`
+  font-size: 1.4rem;
   font-weight: bold;
+  color: white;
+  margin-bottom: 0.5rem;
+`;
+
+const Description = styled.p`
+  font-size: 0.95rem;
+  color: #c9c9c9;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+
+  span {
+    color: white;
+  }
 `;
 
 const Text = styled.div`
-  font-size: 0.8rem;
-  color: #666;
-  margin-top: 0.5rem;
+  position: absolute;
+  bottom: 1rem;
+  right: 1.5rem;
+  font-size: 0.85rem;
+  color: #9b7ed8;
+  background-color: #2f2f2f;
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  font-weight: 600;
+  transition: background-color 0.2s;
+
+  ${GoToBox}:hover & {
+    background-color: #3b3b3b;
+  }
 `;

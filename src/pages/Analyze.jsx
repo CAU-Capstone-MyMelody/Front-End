@@ -21,10 +21,21 @@ const Analyze = () => {
             Librosa를 통해 피치(음정)를 분석하고, ChatGPT를 활용하여 음악을
             추천해 드립니다.
           </p>
+          <h2>
+            <strong>📌진행 순서</strong>
+          </h2>
           <p>
-            ☑️ <strong>테스트 전 준비사항</strong>
+            ✔️ 장르 선택
             <br />
-            <br />● 조용한 환경에서 테스트 진행
+            ✔️ 녹음
+            <br />
+            ✔️ 녹음 결과 확인
+          </p>
+          <h2>
+            <strong>☑️ 테스트 전 준비사항</strong>
+          </h2>
+          <p>
+            ● 조용한 환경에서 테스트 진행
             <br />● 이어폰/헤드셋 사용 권장
             <br />● 충분한 호흡 후 편안하게 소리 내기
           </p>
@@ -32,7 +43,7 @@ const Analyze = () => {
 
         <CoachBtn
           onClick={() => {
-            navigate("/guideline");
+            navigate("/genre");
           }}
         >
           <StartRecordingButton>시작</StartRecordingButton>

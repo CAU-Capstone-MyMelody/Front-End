@@ -255,47 +255,15 @@ const CoachRecordPage = () => {
 
     setIsShow(true);
 
-    // try {
-    //   const formData = new FormData();
-    //   formData.append("file", audioBlob, audioBlob.name); // 파일 이름 설정
-    //   formData.append(
-    //     "youtube_url",
-    //     `https://www.youtube.com/watch?v=${videoId}`
-    //   );
-    //   formData.append("start_time", startTime); // 시작 시간 추가
-    //   formData.append("end_time", endTime); // 끝 시간 추가
-
-    //   console.log(formData.get("file"));
-
-    //   const { time, recordedPitch, originalPitch } = dummyAnalysisResult2;
-
-    //   console.log(dummyAnalysisResult2);
-
-    //   navigate("/coachpitchanalysis", {
-    //     state: {
-    //       time,
-    //       recordedPitch,
-    //       originalPitch,
-    //       audioBlob,
-    //       videoId,
-    //     },
-    //   });
-    // } catch (error) {
-    //   console.error("분석 중 오류 발생:", error);
-    //   alert("분석 중 오류가 발생했습니다.");
-    // }
-
     try {
       const formData = new FormData();
       formData.append("file", audioBlob, audioBlob.name); // 파일 이름 설정
-      formData.append(
-        "youtube_url",
-        `https://www.youtube.com/watch?v=${videoId}`
-      );
       formData.append("start_time", startTime); // 시작 시간 추가
       formData.append("end_time", endTime); // 끝 시간 추가
 
       console.log(formData.get("file"));
+      console.log("시작 시간:", startTime);
+      console.log("종료 시간:", endTime);
 
       let analyzeUrl;
       if (videoId === "uEsT7K_X7Pw") {
@@ -375,10 +343,8 @@ const CoachRecordPage = () => {
 
           <RecordBox>
             <Recorder onRecordingComplete={setAudioBlob} />
-
-            {/* 🔽 오디오 파일 업로드 UI */}
             <UploadLabel htmlFor="audio-upload">
-              또는 오디오 파일 업로드
+              ▶️ 버튼을 통해 녹음 또는 오디오 파일 업로드
             </UploadLabel>
             <FileInput
               id="audio-upload"

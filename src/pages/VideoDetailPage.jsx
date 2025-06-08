@@ -83,7 +83,7 @@ const VideoDetailPage = () => {
             </VideoWrapper>
           )}
         </Content>
-        <CoachBtn onClick={() => navigate(`/vocalrecord?videoId=${videoId}`)}>
+        {/* <CoachBtn onClick={() => navigate(`/vocalrecord?videoId=${videoId}`)}>
           <StartCoachingButton>
             <img src="/icon/MicBlank.png" alt="Search" />
             &nbsp;음정 코칭
@@ -94,7 +94,7 @@ const VideoDetailPage = () => {
             <img src="/icon/MicBlank.png" alt="Mic" />
             &nbsp;노래 합성하기
           </StartCoachingButton>
-        </CoachBtn>
+        </CoachBtn> */}
       </ListContainer>
       <Nav />
     </Container>
